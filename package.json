@@ -16,6 +16,7 @@
 		"@sveltejs/kit": "^1.20.4",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
+		"carbon-components-svelte": "^0.80.0",
 		"eslint": "^8.28.0",
 		"eslint-plugin-svelte": "^2.30.0",
 		"svelte": "^4.0.5",
