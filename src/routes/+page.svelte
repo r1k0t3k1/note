@@ -8,7 +8,5 @@
 </h1>
 
 <a href="{base}/">home</a>
-<!--
 <a href="{base}/about">about me</a>
 <a href="{base}/blog">my blog</a>
--->
