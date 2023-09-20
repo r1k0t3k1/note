@@ -31,7 +31,6 @@ jobs:
           BASE_PATH: '/note'
         run: |
           npm run build
-          mkdir build
           touch build/.nojekyll
 
       - name: Upload Artifacts
