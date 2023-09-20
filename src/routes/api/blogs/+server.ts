@@ -8,6 +8,10 @@ export function GET() {
     const dirPath = "src/contents/"
     const files = fs.readdirSync(dirPath, { withFileTypes: true })
       .filter(dirent => dirent.isFile() && dirent.name.endsWith(".md"));
-    return json(files);
+    return json({
+      files
+    }, {
+      headers: { "Content-Type": "application/json" }
+    });
 }
 
