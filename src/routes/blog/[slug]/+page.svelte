@@ -7,12 +7,21 @@
 </script>
 
 <div class="container">
-  {@html data.post.content}
+  <h1>{data.post.title}<h1>
+  <hr>
+  <ClickableTile>
+    {@html data.post.content}
+  </ClickableTile>
 </div>
 
 <style>
   .container {
     max-width: 768px;
     margin: 0 auto;
+  }
+
+  :global(.container img) {
+    max-width: 100%;
+    height: auto;
   }
 </style>
