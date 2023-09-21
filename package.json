@@ -22,6 +22,7 @@
 		"rehype-stringify": "^10.0.0",
 		"remark-extract-frontmatter": "^3.2.0",
 		"remark-frontmatter": "^5.0.0",
+		"remark-gfm": "^4.0.0",
 		"remark-parse": "^11.0.0",
 		"remark-parse-frontmatter": "^1.0.3",
 		"remark-rehype": "^11.0.0",

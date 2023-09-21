@@ -5,6 +5,7 @@ import remarkFrontmatter from "remark-frontmatter";
 import remarkExtractFrontmatter from "remark-extract-frontmatter";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
+import remarkGfm from "remark-gfm";
 import yaml from "yaml";
 import { Post } from "$lib/posts";
 
@@ -19,15 +20,17 @@ const processor = unified()
     yaml: yaml.parse,
     name: "frontMatter"
   })
+  .use(remarkGfm)
   .use(remarkRehype)
   .use(rehypeStringify);
 
 export async function parseMarkdown(path: string): Post {
   const inputMarkdown = fs.readFileSync(path, "utf-8");
   const result = processor.processSync(inputMarkdown);
-  console.log(result);
   return new Post(
     result.data.frontMatter.title,
+    result.data.frontMatter.id,
+    result.data.frontMatter.description,
     result.data.frontMatter.author,
     result.data.frontMatter.createdAt,
     result.value
