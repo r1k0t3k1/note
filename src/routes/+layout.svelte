@@ -37,6 +37,6 @@
 </SideNav>
 </Header>
 
-<Content>
+<Content style="padding:1rem">
   <slot />
 </Content>

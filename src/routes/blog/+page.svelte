@@ -21,7 +21,7 @@
 <style>
   .container {
     max-width: 768px;
-    margin: 0 auto;
+    margin: auto;
   }
   p {
     color: grey;
