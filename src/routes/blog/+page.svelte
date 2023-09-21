@@ -2,6 +2,7 @@
   import "carbon-components-svelte/css/g90.css";
   import { ClickableTile } from "carbon-components-svelte";
   import { Truncate } from "carbon-components-svelte";
+  import { base } from "$app/paths";
 
   /** @type {import('./$types').PageData} */    
   export let data;
@@ -9,7 +10,7 @@
 
 <div class="container">
 {#each data.posts as post}
-  <ClickableTile href="/blog/{post.id}" style="margin-bottom:8px">
+  <ClickableTile href="{base}/blog/{post.id}" style="margin-bottom:8px">
     <p>Published at: {post.createdAt}</p>
     <h1>{post.title}</h1>
     <Truncate>{post.description}</Truncate>
