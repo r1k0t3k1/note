@@ -17,6 +17,9 @@ export default {
 		}),
    	paths: {
 			base: dev ? '' : process.env.BASE_PATH,
+		},
+   	prerender: {
+			entries: ["/","/about","/api/blogs.json","/blog","/api/blog/1"]
 		}
 	}
 };

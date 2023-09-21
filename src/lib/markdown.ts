@@ -1,0 +1,36 @@
+import fs from "fs";
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import remarkFrontmatter from "remark-frontmatter";
+import remarkExtractFrontmatter from "remark-extract-frontmatter";
+import remarkRehype from "remark-rehype";
+import rehypeStringify from "rehype-stringify";
+import yaml from "yaml";
+import { Post } from "$lib/posts";
+
+const processor = unified()
+  .use(remarkParse)
+  .use(remarkFrontmatter, [{
+    type: "yaml",
+    marker: "-",
+    anywhere: false
+  }])
+  .use(remarkExtractFrontmatter, {
+    yaml: yaml.parse,
+    name: "frontMatter"
+  })
+  .use(remarkRehype)
+  .use(rehypeStringify);
+
+export async function parseMarkdown(path: string): Post {
+  const inputMarkdown = fs.readFileSync(path, "utf-8");
+  const result = processor.processSync(inputMarkdown);
+  console.log(result);
+  return new Post(
+    result.data.frontMatter.title,
+    result.data.frontMatter.author,
+    result.data.frontMatter.createdAt,
+    result.value
+  );
+}
+

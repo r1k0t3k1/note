@@ -1,6 +1,15 @@
-<script lang="ts">
+<script>
+  /** @type {import('./$types').PageData} */    
+  export let data;
 </script>
+<div>test</div>
+<ul>
+  {#each data.posts as post}
+    <li>
+      <p>
+        {post.title}
+      </p>
+    </li>
+  {/each}
+</ul>
 
-<h1>
-  This page is "blog".
-</h1>

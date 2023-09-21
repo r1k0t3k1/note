@@ -19,11 +19,20 @@
 		"carbon-components-svelte": "^0.80.0",
 		"eslint": "^8.28.0",
 		"eslint-plugin-svelte": "^2.30.0",
+		"rehype-stringify": "^10.0.0",
+		"remark-extract-frontmatter": "^3.2.0",
+		"remark-frontmatter": "^5.0.0",
+		"remark-parse": "^11.0.0",
+		"remark-parse-frontmatter": "^1.0.3",
+		"remark-rehype": "^11.0.0",
+		"remark-stringify": "^11.0.0",
 		"svelte": "^4.0.5",
 		"svelte-check": "^3.4.3",
 		"tslib": "^2.4.1",
 		"typescript": "^5.0.0",
-		"vite": "^4.4.2"
+		"unified": "^11.0.3",
+		"vite": "^4.4.2",
+		"yaml": "^2.3.2"
 	},
 	"type": "module"
 }
