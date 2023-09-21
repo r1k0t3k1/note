@@ -5,7 +5,7 @@ import { getPosts } from "$lib/posts"
 
 export const prerender = true;
 
-export function GET() {
-    return json(getPosts());
+export async function GET() {
+    return json(await getPosts());
 }
 

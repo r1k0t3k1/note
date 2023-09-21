@@ -25,7 +25,6 @@ export async function getPosts(): string[] {
     for(let i = 0; i < files.length; i++) {
       if(files[i].name) {
         const md = await parseMarkdown(`${dirPath}${files[i].name}`);
-        //const md = fs.readFileSync(`${dirPath}${files[i].name}`, { encoding: "utf8" });
         if (md) {
             posts.push(md);
         }
