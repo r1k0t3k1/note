@@ -1,12 +1,20 @@
 <script>
-  import "carbon-components-svelte/css/g90.css";
-  import { ClickableTile } from "carbon-components-svelte";
   import { MetaTags } from "svelte-meta-tags";
   import { base } from "$app/paths";
 
   /** @type {import('./$types').PageData} */
   export let data;
 </script>
+
+<svelte:head>
+  <link rel="stylesheet" href="/atom-one-dark.min.css"/>
+  <script src="/highlight.min.js"></script>
+  <script>
+    window.onload = function () {
+      hljs.highlightAll();
+    };
+  </script>
+</svelte:head>
 
 <MetaTags
   title="{data.post.title}"
@@ -30,9 +38,7 @@
 <div class="container">
   <h1>{data.post.title}<h1>
   <hr>
-  <ClickableTile>
-    {@html data.post.content}
-  </ClickableTile>
+  {@html data.post.content}
 </div>
 
 <style>
@@ -44,5 +50,8 @@
   :global(.container img) {
     max-width: 100%;
     height: auto;
+  }
+  :global(.container code) {
+    font-size: 45%;
   }
 </style>

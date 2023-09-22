@@ -15,9 +15,15 @@ test`test`test
 
 ***test***
 
-```
+```python
 a = b;
 a = test();
+```
+
+```js
+window.addEventListener('DOMContentLoaded', (event) => {
+  console.log('DOM fully loaded and parsed');
+});
 ```
 
 ![alt](https://ascii.jp/img/2023/05/01/3531840/l/f3cf566db48c40e1.png)

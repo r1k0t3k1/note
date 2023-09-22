@@ -1,14 +1,16 @@
 import adapter from '@sveltejs/adapter-static';
-//import { vitePreprocess } from '@sveltejs/kit/vite';
+import { optimizeImports, elements } from "carbon-preprocess-svelte";
 
 const dev = process.argv.includes('dev');
 
 /** @type {import('@sveltejs/kit').Config} */
 export default {
+  preprocess:[
+    optimizeImports(),
+    elements()
+  ],
 	kit: {
 		adapter: adapter({
-			// default options are shown. On some platforms
-			// these options are set automatically — see below
 			pages: 'build',
 			assets: 'build',
 			fallback: undefined,
@@ -20,6 +22,6 @@ export default {
 		},
    	prerender: {
 			entries: ["/","/about","/api/blogs.json","/blog","/api/blog/1"]
-		}
+		},
 	}
 };
