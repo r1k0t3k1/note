@@ -41,12 +41,12 @@
     max-width: 796px;
     margin: 0 auto;
   }
+  :global(.container code) {
+    font-size:clamp(10px,2.3vw,18px);
+  }
 
   :global(.container img) {
     max-width: 100%;
     height: auto;
-  }
-  :global(.container code) {
-    font-size: 45%;
   }
 </style>
