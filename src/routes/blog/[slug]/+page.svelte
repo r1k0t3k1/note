@@ -47,6 +47,8 @@
 
   :global(.container img) {
     max-width: 100%;
+    display: block;  
     height: auto;
+    margin: auto;
   }
 </style>
