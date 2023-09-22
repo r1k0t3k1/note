@@ -7,8 +7,8 @@
 </script>
 
 <svelte:head>
-  <link rel="stylesheet" href="/atom-one-dark.min.css"/>
-  <script src="/highlight.min.js"></script>
+  <link rel="stylesheet" href="{base}/atom-one-dark.min.css"/>
+  <script src="{base}/highlight.min.js"></script>
   <script>
     window.onload = function () {
       hljs.highlightAll();
