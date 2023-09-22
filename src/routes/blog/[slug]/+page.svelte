@@ -42,7 +42,7 @@
     margin: 0 auto;
   }
   :global(.container code) {
-    font-size:clamp(10px,2.3vw,18px);
+    font-size:clamp(13px,2.3vw,18px);
   }
 
   :global(.container img) {
