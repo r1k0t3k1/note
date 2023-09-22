@@ -8,3 +8,7 @@ createdAt: "2023-09-20"
 
 # blog sample 1
 testtest
+
+```js
+export const test = alert(0);
+```

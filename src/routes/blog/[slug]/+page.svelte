@@ -8,13 +8,8 @@
 
 <svelte:head>
   <link rel="stylesheet" href="{base}/atom-one-dark.min.css"/>
-  <script src="{base}/highlight.min.js"></script>
-  <script>
-    window.onload = function () {
-      hljs.highlightAll();
-    };
-  </script>
 </svelte:head>
+
 
 <MetaTags
   title="{data.post.title}"
@@ -42,7 +37,7 @@
 </div>
 
 <style>
-  .container {
+  :global(.container) {
     max-width: 796px;
     margin: 0 auto;
   }

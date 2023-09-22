@@ -5,6 +5,7 @@ import remarkFrontmatter from "remark-frontmatter";
 import remarkExtractFrontmatter from "remark-extract-frontmatter";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
+import rehypeHighlight from "rehype-highlight";
 import remarkGfm from "remark-gfm";
 import yaml from "yaml";
 import { Post } from "$lib/posts";
@@ -22,6 +23,7 @@ const processor = unified()
   })
   .use(remarkGfm)
   .use(remarkRehype)
+  .use(rehypeHighlight)
   .use(rehypeStringify);
 
 export async function parseMarkdown(path: string): Post {
