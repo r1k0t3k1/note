@@ -1,0 +1,53 @@
+import puppeteer from "puppeteer";
+import * as fs from "fs";
+
+export async function generateOgpImage(postId: string) {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.setViewport({
+    width: 1500,
+    height:800
+  });
+
+  // TODO html escape
+  let title = "aaaaaaaaab\naaaaaaaaaaaaaaaああああああああああああああああAAAAAA";
+ 
+  const font = fs.readFileSync("static/Helvetica-Bold.ttf", {encoding: "base64"});
+
+  const goatImg = fs.readFileSync("static/goat.png", {encoding: "base64"});
+  const imgSize = {x: 619, y:495 }
+  const scale = 0.35
+  const html = `
+  <div id=ogp style="width:1200px;height:630px">
+    <div style="width:630px;height:630px;margin:0 auto;">
+      <div style="height:100px;box-sizing:border-box;padding:8px;">
+        <div style="margin:0;color:#C60000;font-size:40px;font-family:MyFont">RIKO'TEKI</div>
+        <div style="margin:0;color:#C60000;font-size:26px">rikotekiのノート</div>
+      </div>
+      <div style="height:310px;box-sizing:border-box;padding:8px;">
+        <div style="color:#000000;-webkit-box-orient:vertical;overflow:hidden;display:-webkit-box;text-overflow:ellipsis;-webkit-line-clamp:3;font-size:72px;overflow-wrap:break-word">
+            ${title}
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between">
+        <img style="margin-left:16px;width:${imgSize.y*scale}px;height:${imgSize.x*scale}px" src="data:image/png;base64,${goatImg}">
+        <p style="font-family:MyFont;font-size:26px;margin-top:150px">2023/09/22</p>
+      </div>
+    </div>
+  </div>
+  <style>
+    @font-face {
+      font-family: "MyFont";
+      src: url("data:font/ttf;base64,${font}")
+    }
+  </style>
+  `;
+
+  await page.setContent(html)
+
+  const div = await page.$("#ogp");
+  if(!div) { return }
+  await div.screenshot({ path: `static/ogp/${id}.png` });
+
+  await browser.close();
+}

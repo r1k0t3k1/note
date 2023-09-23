@@ -41,14 +41,24 @@
     max-width: 796px;
     margin: 0 auto;
   }
+  :global(.container h1) {
+    margin-bottom: 16px;
+  }
   :global(.container code) {
     font-size:clamp(13px,2.3vw,18px);
   }
-
+  :global(.container p) {
+    margin-bottom: 24px;
+    font-size:clamp(16px,2.3vw,24px);
+  }
+  :global(.container pre) {
+    margin-bottom: 24px;
+  }
   :global(.container img) {
     max-width: 100%;
     display: block;  
     height: auto;
     margin: auto;
+    margin-bottom: 24px;
   }
 </style>
