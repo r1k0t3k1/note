@@ -1,6 +1,7 @@
 <script>
   import { MetaTags } from "svelte-meta-tags";
   import { base } from "$app/paths";
+  import "/static/github-markdown.css";
 
   /** @type {import('./$types').PageData} */
   export let data;
@@ -21,7 +22,7 @@
     description: data.post.description,
     images: [
       {
-        url: `https://r1k0t3k1.github.io${base}/ogp/test.png`,
+        url: `https://r1k0t3k1.github.io${base}/ogp/{data.post.id}.png`,
         width: 1200,
         height: 630,
         alt: data.post.title
@@ -30,35 +31,23 @@
   }}
 />
 
-<div class="container">
-  <h1>{data.post.title}<h1>
-  <hr>
+<div class="markdown-body">
+  <h1>{data.post.title}</h1>
   {@html data.post.content}
 </div>
 
 <style>
-  :global(.container) {
-    max-width: 796px;
+  :global(.markdown-body) {
+    font-size: 16px;
+    box-sizing: border-box;
+    min-width: 200px;
+    max-width: 980px;
     margin: 0 auto;
+    padding: 45px;
   }
-  :global(.container h1) {
-    margin-bottom: 16px;
-  }
-  :global(.container code) {
-    font-size:clamp(13px,2.3vw,18px);
-  }
-  :global(.container p) {
-    margin-bottom: 24px;
-    font-size:clamp(16px,2.3vw,24px);
-  }
-  :global(.container pre) {
-    margin-bottom: 24px;
-  }
-  :global(.container img) {
-    max-width: 100%;
-    display: block;  
-    height: auto;
-    margin: auto;
-    margin-bottom: 24px;
+  @media (max-width: 767px) {
+    .markdown-body {
+      padding: 15px;
+    }
   }
 </style>

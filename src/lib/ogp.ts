@@ -1,7 +1,15 @@
 import puppeteer from "puppeteer";
 import * as fs from "fs";
+import { Post } from "$lib/posts";
+import { getPostById } from "$lib/posts";
 
 export async function generateOgpImage(postId: string) {
+  const post: Post = await getPostById(postId);
+  console.log(post);  
+  // TODO html escape
+  let title = post.title;
+  let createdAt = post.createdAt;
+
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.setViewport({
@@ -9,8 +17,6 @@ export async function generateOgpImage(postId: string) {
     height:800
   });
 
-  // TODO html escape
-  let title = "aaaaaaaaab\naaaaaaaaaaaaaaaああああああああああああああああAAAAAA";
  
   const font = fs.readFileSync("static/Helvetica-Bold.ttf", {encoding: "base64"});
 
@@ -31,7 +37,7 @@ export async function generateOgpImage(postId: string) {
       </div>
       <div style="display:flex;justify-content:space-between">
         <img style="margin-left:16px;width:${imgSize.y*scale}px;height:${imgSize.x*scale}px" src="data:image/png;base64,${goatImg}">
-        <p style="font-family:MyFont;font-size:26px;margin-top:150px">2023/09/22</p>
+        <p style="font-family:MyFont;font-size:26px;margin-top:150px">${createdAt}</p>
       </div>
     </div>
   </div>
@@ -47,7 +53,7 @@ export async function generateOgpImage(postId: string) {
 
   const div = await page.$("#ogp");
   if(!div) { return }
-  await div.screenshot({ path: `static/ogp/${id}.png` });
+  await div.screenshot({ path: `static/ogp/${post.id}.png` });
 
   await browser.close();
 }
