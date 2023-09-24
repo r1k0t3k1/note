@@ -18,7 +18,8 @@ export async function generateOgpImage(postId: string) {
   });
 
  
-  const font = fs.readFileSync("static/Helvetica-Bold.ttf", {encoding: "base64"});
+  const nameFont = fs.readFileSync("static/Helvetica-Bold.ttf", {encoding: "base64"});
+  const titleFont = fs.readFileSync("static/hiragino-w5.ttc", {encoding: "base64"});
 
   const goatImg = fs.readFileSync("static/goat.png", {encoding: "base64"});
   const imgSize = {x: 619, y:495 }
@@ -26,12 +27,12 @@ export async function generateOgpImage(postId: string) {
   const html = `
   <div id=ogp style="width:1200px;height:630px">
     <div style="width:630px;height:630px;margin:0 auto;">
-      <div style="height:100px;box-sizing:border-box;padding:8px;">
-        <div style="margin:0;color:#C60000;font-size:40px;font-family:MyFont">RIKO'TEKI</div>
+      <div style="height:100px;box-sizing:border-box;padding:8px;font-family:NameFont;">
+        <div style="margin:0;color:#C60000;font-size:40px;">RIKO'TEKI</div>
         <div style="margin:0;color:#C60000;font-size:26px">rikotekiのノート</div>
       </div>
       <div style="height:310px;box-sizing:border-box;padding:8px;">
-        <div style="color:#000000;-webkit-box-orient:vertical;overflow:hidden;display:-webkit-box;text-overflow:ellipsis;-webkit-line-clamp:3;font-size:72px;overflow-wrap:break-word">
+        <div style="font-family:Titlefont;color:#000000;-webkit-box-orient:vertical;overflow:hidden;display:-webkit-box;text-overflow:ellipsis;-webkit-line-clamp:3;font-size:72px;overflow-wrap:break-word">
             ${title}
         </div>
       </div>
@@ -43,8 +44,12 @@ export async function generateOgpImage(postId: string) {
   </div>
   <style>
     @font-face {
-      font-family: "MyFont";
-      src: url("data:font/ttf;base64,${font}")
+      font-family: "NameFont";
+      src: url("data:font/ttf;base64,${nameFont}")
+    }
+    @font-face {
+      font-family: "TitleFont";
+      src: url("data:font/ttf;base64,${titleFont}")
     }
   </style>
   `;
