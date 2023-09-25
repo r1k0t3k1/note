@@ -17,12 +17,12 @@
   description={data.post.description}
   openGraph={{
     type: "website",
-    url: `https://r1k0t3k1.github.io${base}/blog/blog-sample-1`,
+    url: `https://r1k0t3k1.github.io${base}/blog/${data.post.id}`,
     title: data.post.title,
     description: data.post.description,
     images: [
       {
-        url: `https://r1k0t3k1.github.io${base}/ogp/{data.post.id}.png`,
+        url: `https://r1k0t3k1.github.io${base}/ogp/${data.post.id}.png`,
         width: 1200,
         height: 630,
         alt: data.post.title
