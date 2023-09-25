@@ -9,7 +9,6 @@
 
 <svelte:head>
   <link rel="stylesheet" href="{base}/atom-one-dark.min.css"/>
-  <meta property="og:type" content="article" />
 </svelte:head>
 
 
