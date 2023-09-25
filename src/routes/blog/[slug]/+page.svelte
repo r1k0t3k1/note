@@ -16,7 +16,7 @@
   title="{data.post.title}"
   description={data.post.description}
   openGraph={{
-    type: "website",
+    type: "article",
     url: `https://r1k0t3k1.github.io${base}/blog/${data.post.id}`,
     title: data.post.title,
     description: data.post.description,
@@ -27,7 +27,11 @@
         height: 630,
         alt: data.post.title
       }
-    ]
+    ],
+    twitter: {
+      cardType: "summary_large_image",
+      handle: "@r1k0t3k1"
+    }
   }}
 />
 
