@@ -9,6 +9,7 @@
 
 <svelte:head>
   <link rel="stylesheet" href="{base}/atom-one-dark.min.css"/>
+  <meta property="og:type" content="article" />
 </svelte:head>
 
 
@@ -16,9 +17,8 @@
   title="{data.post.title}"
   description={data.post.description}
   openGraph={{
-    type: "article",
-    url: `https://r1k0t3k1.github.io${base}/blog/${data.post.id}`,
     title: data.post.title,
+    url: `https://r1k0t3k1.github.io${base}/blog/${data.post.id}`,
     description: data.post.description,
     images: [
       {
