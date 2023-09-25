@@ -1,5 +1,5 @@
 ---
-title: "blog sample 2"
+title: "blog sample 2\nBLOG SAMPLE 2\nブログ サンプル 2"
 id: "blog-sample-2"
 description: "This is blog-sample-2. これは説明文です。"
 author: "rikoteki"
