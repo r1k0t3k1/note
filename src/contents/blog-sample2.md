@@ -1,7 +1,7 @@
 ---
 title: "blog sample 2"
 id: "blog-sample-2"
-description: "This is blog-sample-2. これは説明文です。ほにゃららほにゃらっらあああああああああああああああああああああああああああああああああああああああああああああああああああああ"
+description: "This is blog-sample-2. これは説明文です。"
 author: "rikoteki"
 createdAt: "2023-09-20"
 ---
