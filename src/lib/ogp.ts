@@ -29,7 +29,7 @@ export async function generateOgpImage(postId: string) {
     <div style="width:285px;height:630px;">
       <img style="margin-left:36px;margin-top:300px;width:${imgSize.y*scale}px;height:${imgSize.x*scale}px" src="data:image/png;base64,${goatImg}">
     </div>
-    <div style="width:630px;height:630px;padding:24px;">
+    <div style="width:630px;height:630px;padding:36px;">
       <div style="height:100px;box-sizing:border-box;font-family:NameFont;">
         <div style="margin:0;color:#C60000;font-size:40px;">RIKO'TEKI</div>
         <div style="margin:0;color:#C60000;font-size:26px">rikotekiのノート</div>
