@@ -27,11 +27,11 @@
         height: 630,
         alt: data.post.title
       }
-    ],
-    twitter: {
-      cardType: "summary_large_image",
-      handle: "@r1k0t3k1"
-    }
+    ]
+  }},
+  twitter={{
+    cardType: "summary_large_image",
+    handle: "@r1k0t3k1"
   }}
 />
 
