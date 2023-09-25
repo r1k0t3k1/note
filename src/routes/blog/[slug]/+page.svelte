@@ -9,8 +9,8 @@
 
 <svelte:head>
   <link rel="stylesheet" href="{base}/atom-one-dark.min.css"/>
+  <meta property="og:type" content="article"/>
 </svelte:head>
-
 
 <MetaTags
   title="{data.post.title}"
@@ -27,7 +27,7 @@
         alt: data.post.title
       }
     ]
-  }},
+  }}
   twitter={{
     cardType: "summary_large_image",
     handle: "@r1k0t3k1"
