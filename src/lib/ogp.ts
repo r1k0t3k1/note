@@ -62,7 +62,7 @@ export async function generateOgpImage(postId: string) {
 
   const div = await page.$("#ogp");
   if(!div) { return }
-  await div.screenshot({ path: `static/ogp/${post.id}.png` });
+  console.log("👺" + await div.screenshot({ path: `static/ogp/${post.id}.png` }));
 
   await browser.close();
 }
