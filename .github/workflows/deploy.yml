@@ -16,6 +16,8 @@ jobs:
       #   uses: pnpm/action-setup@v2
       #   with:
       #     version: 8
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1.2.3
 
       - name: Install Node.js
         uses: actions/setup-node@v3
