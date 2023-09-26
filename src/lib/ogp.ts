@@ -11,8 +11,7 @@ export async function generateOgpImage(postId: string) {
   let createdAt = post.createdAt;
 
   const browser = await puppeteer.launch({
-      headless: true,
-      slowMo: 50
+      headless: "new",
     });
   const page = await browser.newPage();
   await page.setViewport({
