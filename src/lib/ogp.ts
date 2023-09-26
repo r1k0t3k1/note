@@ -5,7 +5,7 @@ import { getPostById } from "$lib/posts";
 
 export async function generateOgpImage(postId: string) {
   const post: Post = await getPostById(postId);
-  console.log(post);  
+  if (fs.existsSync(`static/ogp/${post.id}.png`)) { return; }
   // TODO html escape
   let title = post.title;
   let createdAt = post.createdAt;
