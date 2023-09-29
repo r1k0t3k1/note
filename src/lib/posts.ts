@@ -34,7 +34,7 @@ export async function getPosts(): Post[] {
         }
       }
     };
-    return posts;
+    return posts.sort((a,b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
 }
 
 export async function getPostById(id: string): Post|undefined {

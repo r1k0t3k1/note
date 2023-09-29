@@ -30,8 +30,7 @@
 
 <SideNav bind:isOpen={isSideNavOpen}>
   <SideNavItems>
-    <SideNavLink href="{base}/" text="home" on:click={toggle}/>
-    <SideNavLink href="{base}/about" text="about" on:click={toggle}/>
+    <SideNavLink href="{base}/" text="about me" on:click={toggle}/>
     <SideNavLink href="{base}/blog" text="blog" on:click={toggle}/>
   </SideNavItems>
 </SideNav>
