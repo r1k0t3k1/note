@@ -54,9 +54,9 @@
     margin: 0 auto;
     padding: 45px;
   }
-  /*@media (max-width: 767px) {
+  @media (max-width: 767px) {
     .markdown-body {
-      padding: 15px;
+      padding: 8px;
     }
-  }*/
+  }
 </style>
