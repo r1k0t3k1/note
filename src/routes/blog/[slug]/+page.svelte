@@ -41,8 +41,10 @@
 
 <style>
   :global(img) {
-    width: 100%;
+    max-width: 100%;
     height: auto;
+    display: block;
+    margin: auto;
   }
   :global(.markdown-body) {
     font-size: 16px;
