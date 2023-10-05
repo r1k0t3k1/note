@@ -8,13 +8,23 @@ export class Post {
   author: string;
   createdAt: string;
   content: string;
+  isDraft: boolean;
 
-  constructor(title: string, id: string, description: string,author: string, createdAt: string, content: string) {
+  constructor(
+    title: string,
+    id: string,
+    description: string,
+    author: string,
+    createdAt: string,
+    isDraft: boolean,
+    content: string
+  ) {
     this.title = title;
     this.id = id;
     this.description = description;
     this.author = author;
     this.createdAt = createdAt;
+    this.isDraft = isDraft;
     this.content = content;
   }
 }
@@ -29,7 +39,7 @@ export async function getPosts(): Post[] {
     for(let i = 0; i < files.length; i++) {
       if(files[i].name) {
         const md = await parseMarkdown(`${dirPath}${files[i].name}`);
-        if (md) {
+        if (md && md.isDraft == false ) {
             posts.push(md);
         }
       }

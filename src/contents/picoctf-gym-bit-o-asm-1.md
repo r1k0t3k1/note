@@ -4,6 +4,7 @@ id: "picoctf-gym-bit-o-asm-1"
 description: "picoCTF Gym Bit-O-Asm-1のWriteupです。"
 author: "rikoteki"
 createdAt: "2023-09-26"
+isDraft: false
 ---
 
 # 問題

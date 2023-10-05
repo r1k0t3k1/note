@@ -1,10 +1,10 @@
 ---
-title: "picoCTF Gym\nASCII FTW"
-id: "picoctf-gym-ascii-ftw"
+title: "test"
+id: "test"
 description: "picoCTF Gym ASCII FTWのWriteupです。"
 author: "rikoteki"
 createdAt: "2023-09-26"
-isDraft: false
+isDraft: true
 ---
 
 ## 問題

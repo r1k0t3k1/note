@@ -36,6 +36,7 @@ export async function parseMarkdown(path: string): Post {
     result.data.frontMatter.description,
     result.data.frontMatter.author,
     result.data.frontMatter.createdAt,
+    result.data.frontMatter.isDraft,
     result.value
   );
 }
