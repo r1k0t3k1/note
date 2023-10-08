@@ -271,7 +271,7 @@ PDFとMHTMLを結合して保存します。
 
 今回は事前に有効化してしまっていたので表示されていません。
 
-![image](https://github.com/r1k0t3k1/note/assets/57973603/0a44a590-e6b1-4ecc-8c2e-bbd7a82a8712)
+![image](![Animation2](https://github.com/r1k0t3k1/note/assets/57973603/0cd505d4-7102-4076-ab80-7a5a0498a653))
 
 # まとめ
 - PDFビューアーは`%%EOF`の後ろにゴミ文字列があろうが関係なく開ける。
