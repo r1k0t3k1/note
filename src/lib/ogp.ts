@@ -34,7 +34,7 @@ export async function generateOgpImage(postId: string) {
     <div style="width:600px;height:630px;padding:36px;">
       <div style="height:100px;box-sizing:border-box;font-family:NameFont;">
         <div style="margin:0;color:#C60000;font-size:40px;">RIKO'TEKI</div>
-        <div style="margin:0;color:#C60000;font-size:26px">rikotekiのノート</div>
+        <div style="margin:0;color:#C60000;font-size:26px">oreilly poi title</div>
       </div>
       <div style="height:310px;box-sizing:border-box;">
         <div style="font-family:Titlefont;color:#000000;-webkit-box-orient:vertical;overflow:hidden;display:-webkit-box;text-overflow:ellipsis;-webkit-line-clamp:3;font-size:72px;overflow-wrap:break-word">
