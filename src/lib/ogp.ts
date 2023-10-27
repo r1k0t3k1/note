@@ -27,7 +27,7 @@ export async function generateOgpImage(postId: string) {
   const imgSize = {x: 619, y:495 }
   const scale = 0.5
   const html = `
-    <div id=ogp style="width:1200px;height:630px;padding:32px;">
+    <div id=ogp style="width:1200px;height:630px;padding:40px;">
     <div style="width:1000;margin:auto">
       <div style="height:120px;font-family:NameFont;">
         <div style="color:#C60000;font-size:40px;">RIKO'TEKI</div>
