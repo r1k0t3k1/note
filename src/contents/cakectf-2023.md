@@ -4,7 +4,7 @@ id: "cakectf-2023-writeup"
 description: "Cake CTF 2023のWriteupです。"
 author: "rikoteki"
 createdAt: "2023-11-12"
-isDraft: true
+isDraft: false
 ---
 
 # Country DB [Web]
