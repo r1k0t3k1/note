@@ -31,7 +31,7 @@ export async function generateOgpImage(postId: string) {
     <div style="width:1000;margin:auto">
       <div style="height:120px;font-family:NameFont;">
         <div style="color:#C60000;font-size:40px;">RIKO'TEKI</div>
-        <div style="color:#C60000;font-size:26px">rikotekiのノート</div>
+        <div style="color:#C60000;font-size:26px">tekitouna blog</div>
       </div>
       <div style="height:310px;box-sizing:border-box;background:white;">
         <div style="font-family:Titlefont;color:#000000;-webkit-box-orient:vertical;overflow:hidden;display:-webkit-box;text-overflow:ellipsis;-webkit-line-clamp:4;font-size:72px;overflow-wrap:break-word">
