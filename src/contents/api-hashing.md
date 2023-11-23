@@ -10,6 +10,84 @@ isDraft: true
 # API Hashingとは
 # API Hashingを実装する
 
+# Importを0にする
+
+## rustでIAT0のEXEをビルドする
+
+### 普通にビルドした場合
+
+msvcでビルド
+
+.cargo/config.toml
+
+```toml
+[build]
+target = "x86_64-pc-windows-msvc"
+```
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/05cf159c-80fe-4675-91c9-56d024d734e7)
+
+PE Studioで確認すると多数の関数がインポートされている
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/653b41c1-2036-407a-bfef-7e60859ca4f1)
+
+### no_stdでビルドした場合
+
+Config.toml
+
+```toml
+[package]
+name = "buildtool"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
+```
+
+src/main.rs
+```rust
+#![no_std]
+#![no_main]
+
+#[no_mangle]
+pub extern "C" fn _start() -> ! {
+    loop{}
+}
+
+#[panic_handler]
+fn panic(_info: &core::panic::PanicInfo) -> ! {
+    loop {}
+}
+```
+.cargo/config.toml
+
+```toml
+[build]
+target = "x86_64-pc-windows-msvc"
+
+[target.x86_64-pc-windows-msvc]
+rustflags = [
+  "-C", "link-arg=/ENTRY:_start",
+  "-C", "link-arg=/SUBSYSTEM:console",
+]
+```
+
+Importを0にすることができた。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/b5584cfb-e2b7-4e10-9d81-cfe8be9419f5)
+
+`std`モジュールが使用できなくなる
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/69e75e33-20b1-478d-9a01-4c29270e9d59)
+
 # LoadLibraryのロードを隠蔽する
 
 # TEBのアドレス特定
