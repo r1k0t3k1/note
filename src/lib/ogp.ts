@@ -40,7 +40,7 @@ export async function generateOgpImage(postId: string) {
       </div>
       <p style="font-family:MyFont;font-size:26px;margin-top:130px;">${createdAt}</p>
     </div>
-    <div style="position:absolute;right:300px;top:350px;">
+    <div style="position:absolute;right:250px;top:350px;">
       <img style="width:${imgSize.y*scale}px;height:${imgSize.x*scale}px" src="data:image/png;base64,${goatImg}">
     </div>
   </div>
