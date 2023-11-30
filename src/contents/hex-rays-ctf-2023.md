@@ -555,7 +555,7 @@ void read_200chr_from_stdin(long param_1)
 
 https://www.ochappa.net/posts/rsa-hba
 
-ということでこの攻撃用スクリプトを適当に拾ってきて実行すると買い得に成功しました。
+ということでスクリプトを適当に拾ってきて実行すると解読に成功しました。
 
 ```python
 from Crypto.Util.number import long_to_bytes
