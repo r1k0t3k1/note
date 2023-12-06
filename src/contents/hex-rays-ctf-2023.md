@@ -3,8 +3,8 @@ title: "Madame De Maintenon’s \nCryptographic Pursuit –\nUnmasking the Trait
 id: "hex-rays-ctf-2023"
 description: "hex-rays challenge 2023のWriteupです。"
 author: "rikoteki"
-createdAt: "2023-12-1"
-isDraft: true
+createdAt: "2023-12-5"
+isDraft: false
 ---
 
 ## 概要
@@ -15,7 +15,7 @@ https://hex-rays.com/blog/madame-de-maintenons-cryptographic-pursuit-unmasking-t
 
 正答者には抽選でIDA Pro、Tシャツ、キャップが当たります。
 
-(IDA Proほしい！)
+(IDA Proほしい！)※外れた
 
 ## 解析
 
