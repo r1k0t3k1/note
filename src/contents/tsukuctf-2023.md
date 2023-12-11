@@ -273,3 +273,38 @@ data:
 
 渡されたBMPファイルからchrファイルを生成するため、以下のツールを使用しました。
 
+https://github.com/suzukiplan/bmp2chr
+
+このツールは128x128のBMPしか変換できないようなので、PythonでBMPをサイズ変換します。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/dd5ae2a9-11a0-4fff-b737-d10453690ed7)
+
+```python
+from PIL import Image
+i = Image.open("./character.bmp")
+i = i.crop((0,0,128,128))
+i = i.quantize(8)
+i.save("resized.bmp")
+```
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/d46fe80e-542c-42ee-9f9a-55c4193d4163)
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/22832ab9-cae2-496a-a905-2e7cfb5b8a11)
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/81e064dd-5811-47ba-a318-652fa5705405)
+
+
+BMPからCHRへの変換が成功します。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/7efd6044-dbf9-41fd-8b8d-e131ea7c3670)
+
+CHRが生成できたのでアセンブリをビルドしてみるとビルドに成功したのがわかります。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/569d1729-bb1f-4dea-8974-156073fb00a1)
+
+Webで公開されているエミュレータを使用するとタイトル画面？が表示されフラグが表示されます。
+
+https://jsnes.org/
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/9ff55fcf-9c1f-4ae9-bb99-cbc49e68d514)
+
