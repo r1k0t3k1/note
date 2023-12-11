@@ -4,7 +4,7 @@ id: "tsukuctf-2023"
 description: "TsukuCTF 2023のWriteupです。"
 author: "rikoteki"
 createdAt: "2023-12-11"
-isDraft: true
+isDraft: false
 ---
 
 TsukuCTFに0nePaddingで参加してきました。
