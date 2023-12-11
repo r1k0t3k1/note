@@ -238,7 +238,7 @@ character.bmp
 
 ## 静的解析
 
-以下サイト等を参考にNESの命令を調べているとI/Oポート`$2006`への書き込み(二回)でアクセス先VRAMアドレスを決定しI/Oポート`$2007`で書き込む、という命令になるらしいです。
+以下サイト等を参考にNESの命令を調べているとI/Oポート`$2006`への書き込み(二回)でアクセス先VRAMアドレスを決定しI/Oポート`$2007`で書き込む、という命令になるらしいです。`$2006`に`2000`が書き込まれていますが、これはネームテーブル0に対応しておりネームテーブルへの書き込みでどのブロック位置にどのキャラクタが埋め込まれるかが決定されるようです。
 
 http://hp.vector.co.jp/authors/VA042397/nes/index.html
 
@@ -287,14 +287,9 @@ i = i.quantize(8)
 i.save("resized.bmp")
 ```
 
-![image](https://github.com/r1k0t3k1/note/assets/57973603/d46fe80e-542c-42ee-9f9a-55c4193d4163)
-
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/22832ab9-cae2-496a-a905-2e7cfb5b8a11)
 
-![image](https://github.com/r1k0t3k1/note/assets/57973603/81e064dd-5811-47ba-a318-652fa5705405)
-
-
-BMPからCHRへの変換が成功します。
+この状態で変換ツールを実行するとBMPからCHRへの変換が成功します。
 
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/7efd6044-dbf9-41fd-8b8d-e131ea7c3670)
 
@@ -307,4 +302,106 @@ Webで公開されているエミュレータを使用するとタイトル画�
 https://jsnes.org/
 
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/9ff55fcf-9c1f-4ae9-bb99-cbc49e68d514)
+
+# [Web] basic
+
+問題文
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/ea3828fb-49f2-43f5-9010-7109690cfe64)
+
+pcapファイルが渡されます。
+
+問題名から問題文で触れられているパスワードはBASIC認証のことでしょう。
+
+WiresharkでフィルターをかけることでBASIC認証情報が見つかります。
+
+`http.request and http contains "Authorization: Basic"`
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/5920f87f-90d0-4768-8b1b-1ce1b05a87bb)
+
+# [OSINT] 3636
+
+問題文
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/d7dc1d0e-9eb2-4e61-8b42-fc99abbfc474)
+
+以下の画像が渡されます。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/352e1fe8-3e47-49d1-92bc-6f32cb1be94b)
+
+チームの方が既に電話番号とドメインの一部から`とうみょう子ども園`で有ることを特定していました。
+
+その周辺の施設をストリートビューで散歩していたら見つかりました。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/672ef726-6fcb-47ef-8efe-846a78dba876)
+
+`TsukuCTF23{37.502_139.929}`
+
+# [OSINT] fiction
+
+問題文
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/72bffb52-66da-4f60-aea0-6c54036a6c88)
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/64ac2978-fbac-42cd-82f6-08098a90e2c9)
+
+ゲーム上の画像？が渡されます。チームの方が`Valorant`というゲームの`Sunset`というマップであるということは調べてくれていたので、調べると当ゲームはマップごとに座標が割り当てられているらしく、検索すると下記のようなサイトがヒットし、記載されている座標を提出することでフラグとなりました。
+
+https://valorant.fandom.com/wiki/Sunset
+
+# [OSINT] river
+
+問題文
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/1f4c9460-51a3-45e7-b3d1-b0ae6f931aa2)
+
+以下の画像の座標を当てる問題です。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/d7976f4d-e330-4290-9da7-31cd41aab917)
+
+ニューギンの看板が目に付きます。
+
+ニューギンの本部は名古屋の割と中心にあったと思いますが、名古屋の町並みっぽくなかったのでニューギン販売の営業所を当たることにしました。
+
+会社のHPから支店を虱潰しに見ていくと鹿児島営業所付近であることがわかりました。
+
+https://www.newgin.co.jp/company/overview/?tab=3
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/6a41284c-0a84-4757-b97e-05c82f015c0b)
+
+# [OSINT] sunset
+
+問題文
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/3fabde79-2370-49d9-8be9-72cb87a9e432)
+
+運営のshioさんという方が以下の写真を撮った日時を答える問題です。
+
+夕日が海側に見えるので多分西側かなとわかります。向こう側に陸地も少し見えます。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/aea0493b-51da-4ceb-bab4-899982fc828e)
+
+shioさんがなにかのイベント参加後に撮った、ということなのでイベントを特定します。
+
+shioさんのxの2023年分の投稿をざっと漁った感じ、CTFに出題するほどの思い出がありそうなのは講師を努めていたSECCON2023新潟かなぁと、勘で推測しました。
+
+このイベントは2023/9/10に開催されており、開催地は新潟コンピュータ専門学校で海が近いです。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/1f995985-0baf-47f6-af2e-9446cbfaed18)
+
+海側をストリートビューで散歩していると画像の風景に似た箇所を発見しました。
+
+寄居浜というところですね。少し高い位置から写真が取られていたのは日和山展望台から撮影したのでしょうか。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/ca5c55aa-6207-4325-8038-110dd6ce647a)
+
+場所がわかったので次は撮影日時ですが、写真では夕暮れである(日没に近い)ことがわかります。
+
+2023/9/10の日没時間を調べると18:01であることがわかりました。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/50ef84d1-e969-4e7d-8d00-ba89cba3295c)
+
+まだ完全に日が沈んでいないことから18:01より前の時間を何回か入力することでフラグとして受け付けられました。
+
+
 
