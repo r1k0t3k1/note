@@ -1,34 +1,39 @@
 <script>
-  import "carbon-components-svelte/css/g90.css";
-  import { ClickableTile } from "carbon-components-svelte";
-  import { Truncate } from "carbon-components-svelte";
   import { base } from "$app/paths";
-
+  import { Card } from "flowbite-svelte";
   /** @type {import('./$types').PageData} */    
   export let data;
 </script>
 
-<div class="container">
-{#each data.posts as post}
-  <ClickableTile href="{base}/blog/{post.id}" style="margin-bottom:8px">
-    <p>Published at: {post.createdAt}</p>
-    <h1>{post.title}</h1>
-    <Truncate>{post.description}</Truncate>
-  </ClickableTile>
-{/each}
+<div class="card-container">
+  {#each data.posts as post}
+  <Card class="card" href="{base}/blog/{post.id}" style="margin-bottom:8px">
+    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+      {post.title}
+    </h5>
+    <p class="font-normal text-gray-700 dark:text-gray-400 leading-tight">
+      {post.description}
+    </p>
+    <p class="font-normal text-gray-700 dark:text-gray-400 leading-tight">
+      {post.createdAt}
+    </p>
+  </Card>
+  {/each}
 </div>
 
 <style>
-  .container {
-    max-width: 768px;
-    margin: auto;
+  :global(.card-container) {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    box-sizing: border-box;
+    min-width: 200px;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 45px;
   }
-  p {
-    color: grey;
-    margin-bottom: 16px;
-  }
-  h1 {
-    margin-bottom: 16px;
+  @media (max-width: 767px) {
+    .card-container {
+      padding: 8px;
+    }
   }
 </style>
-

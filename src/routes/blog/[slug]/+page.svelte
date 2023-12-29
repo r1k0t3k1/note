@@ -1,7 +1,7 @@
 <script>
   import { MetaTags } from "svelte-meta-tags";
   import { base } from "$app/paths";
-  import "/static/github-markdown.css";
+  import "../../../app.pcss";
 
   /** @type {import('./$types').PageData} */
   export let data;
@@ -34,7 +34,7 @@
   }}
 />
 
-<div class="markdown-body">
+<div class="markdown-body format lg:format-lg dark:format-invert">
   <h1>{data.post.title}</h1>
   {@html data.post.content}
 </div>
@@ -47,7 +47,7 @@
     margin: auto;
   }
   :global(.markdown-body) {
-    font-size: 16px;
+    overflow-wrap: break-word;
     box-sizing: border-box;
     min-width: 200px;
     max-width: 980px;
