@@ -31,6 +31,9 @@
     margin: 0 auto;
     padding: 45px;
   }
+  :global(.card) {
+    margin: 8px;
+  }
   @media (max-width: 767px) {
     .card-container {
       padding: 8px;
