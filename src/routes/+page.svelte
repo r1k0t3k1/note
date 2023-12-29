@@ -2,4 +2,4 @@
   import { base } from '$app/paths';
 </script>
 
-<a href="/blog">blog</a>
+<a href="{base}/blog">blog</a>
