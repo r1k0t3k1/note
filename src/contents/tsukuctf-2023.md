@@ -13,6 +13,8 @@ TsukuCTFに0nePaddingで参加してきました。
 
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/13d4c2c7-4400-406c-a57b-c91cef04a8ba)
 
+# ToC
+
 # [rev] title_screen
 
 問題文
