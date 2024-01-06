@@ -8,7 +8,7 @@
 
 <Navbar  >
   <NavBrand href="{base}/">
-    <img src="/icon.jpg" alt="icon" style="width: 50px;height: 50px; margin: 8px; border-radius: 50%"/>
+    <img src="{base}/icon.jpg" alt="icon" style="width: 50px;height: 50px; margin: 8px; border-radius: 50%"/>
     <span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">rikoteki's note</span>
   </NavBrand>
   <NavHamburger/>
