@@ -123,7 +123,7 @@
   
   :global(.rlc-image-container) {
     position: relative;
-    flex: 1 1 100px;
+    flex: 1 1 160px;
   }
   
   :global(.rlc-image) {
