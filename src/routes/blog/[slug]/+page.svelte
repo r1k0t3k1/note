@@ -45,6 +45,7 @@
     height: auto;
     display: block;
     margin: auto;
+    border: 1px solid #374151;
   }
   :global(.markdown-body) {
     overflow-wrap: break-word;
