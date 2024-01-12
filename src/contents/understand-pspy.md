@@ -149,7 +149,6 @@ def get_processinfo(p):
     m = re.search(r"Uid:\t\d+\t\d+\t(?P<uid>\d+)", status)
     uid = m.group("uid")
     print(f"PID: {p} | UID: {uid} | {plist[p]}")
-    #print(f"PID: {p} UID: {match.group('uid')}  {plist[p]}")
 
 def main():
     while True:
@@ -171,10 +170,72 @@ if __name__ == "__main__":
 
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/bf385ca7-d8f0-486a-ba3b-58be38811c9c)
 
+root権限で実行されたプロセスのコマンドラインも取得できていることがわかります。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/dd0ac51f-548d-45ed-b770-7b6e4ae0d6da)
+
+# 問題点
 
 ただし、このプログラムには問題があります。
 
-無限ループで絶え間なく処理を続けているため、実行中はCPU使用率が99%程度に張り付きます。
+## CPU使用率
+
+無限ループで絶え間なく処理を続けているため、上記スクリプト実行中はCPU使用率が99%~100%程度に張り付きます。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/cbed30a3-3484-416c-9cd1-e2b1d7eacb9d)
+
+この状態だとシステム管理者側に怪しい挙動として検知される可能性があります。(HackTheBoxなどのBoot2Rootではこのスクリプトでも十分かと思いますが。)
+
+また、顧客側の環境に負荷を掛け過ぎて環境を破壊する可能性もあるので安易には使用できません。
+
+### 改善してみる
+
+CPU使用率を低減するため、上記のスクリプトに少し手を入れてみます。
+
+具体的には、1度のループ処理の後、処理を任意の秒数ブロックさせます。
+
+<detail>
+  <summary>改善後のコード</summary>
+
+```diff_python
+import os
+import re
++ import time
+from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED
+
+plist = dict()
+
+def get_processinfo(p):
+    cmdline = open(f"/proc/{p}/cmdline","r").read()
+    plist[p] = cmdline.replace("\x00"," ").strip()
+
+    status = open(f"/proc/{p}/status","r").read()
+    m = re.search(r"Uid:\t\d+\t\d+\t(?P<uid>\d+)", status)
+    uid = m.group("uid")
+    print(f"PID: {p} | UID: {uid} | {plist[p]}")
+
+def main():
+    while True:
+        pids = [f.name for f in os.scandir("/proc") if f.name.isdigit() and f.name not in plist]
+        if len(pids) == 0:
+            continue
+        with ThreadPoolExecutor(max_workers=len(pids)) as executor:
+            tasks = [executor.submit(get_processinfo, p) for p in pids]
+            wait(tasks, return_when=ALL_COMPLETED)
+        + time.sleep(1)
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        os._exit(0)
+```
+
+</detail>
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/6f40b9ed-9e96-41c9-b9f6-c972517a7ca4)
+
+## 生存期間の短いプロセスの取りこぼし
 
 # Inotify API
 
