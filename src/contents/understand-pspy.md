@@ -194,10 +194,10 @@ CPU使用率を低減するため、上記のスクリプトに少し手を入�
 
 具体的には、1度のループ処理の後、処理を任意の秒数ブロックさせます。
 
-<detail>
+<details>
   <summary>改善後のコード</summary>
 
-```diff
+```diff_python
 import os
 import re
 + import time
@@ -231,7 +231,7 @@ if __name__ == "__main__":
         os._exit(0)
 ```
 
-</detail>
+</details>
 
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/6f40b9ed-9e96-41c9-b9f6-c972517a7ca4)
 
