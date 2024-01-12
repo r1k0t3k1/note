@@ -258,5 +258,19 @@ if __name__ == "__main__":
 
 ## Inotify API
 
+Inotify APIはLinuxのファイルシステムイベントを監視するためのAPIです。
+
+以下はman pageからの引用です。
+
+> inotify API はファイルシステムイベントを監視するための機構を提供する。
+inotify は個々のファイルやディレクトリを監視するのに使える。
+ディレクトリを監視する場合、inotify はディレクトリ自身と ディレクトリ内のファイルのイベントを返す。 
+
+Inotify APIを使用するには以下のシステムコールを使用します。
+
+- inotify_init1
+- inotify_add_watch
+- inotify_rm_watch(任意)
+
 
 # 実装してみたリポジトリの紹介
