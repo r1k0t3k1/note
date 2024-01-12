@@ -197,7 +197,7 @@ CPU使用率を低減するため、上記のスクリプトに少し手を入�
 <detail>
   <summary>改善後のコード</summary>
 
-```diff_python
+```diff
 import os
 import re
 + import time
@@ -222,7 +222,7 @@ def main():
         with ThreadPoolExecutor(max_workers=len(pids)) as executor:
             tasks = [executor.submit(get_processinfo, p) for p in pids]
             wait(tasks, return_when=ALL_COMPLETED)
-        + time.sleep(1)
++           time.sleep(1)
 
 if __name__ == "__main__":
     try:
