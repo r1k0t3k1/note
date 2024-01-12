@@ -197,7 +197,7 @@ CPU使用率を低減するため、上記のスクリプトに少し手を入�
 <details>
   <summary>改善後のコード</summary>
 
-```diff_python
+```diff
 import os
 import re
 + import time
