@@ -26,9 +26,9 @@ https://github.com/DominicBreuker/pspy
 
 主な用途は、カレントユーザー以外のユーザー権限で実行されているプロセスのコマンドラインを確認することです。
 
-例えばカレントユーザー以外の権限で設定されたCronジョブが定期的に実行されている場合、`/var/spool/cron`以下に設定ファイルがあるとroot権限が無いとそれぞれの設定を読み取ることができませんが、pspyを対象ホスト上で実行することで定期実行されたプロセスのコマンドラインを確認することができます。
+例えばカレントユーザー以外の権限で設定されたCronジョブが定期的に実行されている場合、`/var/spool/cron`以下に設定ファイルがあるとroot権限無しではそれぞれの設定を読み取ることができませんが、pspyを対象ホスト上で実行することで定期実行されたプロセスのコマンドラインを確認することができます。
 
-HackTheBoxなどのBoot2RootCTFの簡単な問題では、コマンドライン引数にクレデンシャルを設定しているプロセスがあって、権限昇格の手がかりになることがあります。
+HackTheBoxなどのBoot2RootCTFの簡単な問題では、コマンドライン引数にクレデンシャルを設定しているプロセスがあったり、誰でも読み書きできるシェルスクリプトをroot権限で実行している、など権限昇格の手がかりになることがあります。
 
 pspyは主に以下の仕組みを使用して実装されています。
 また、効率的に実行プロセスを列挙するためにされている工夫がいくつかあるので併せて紹介してみたいと思います。
@@ -127,15 +127,50 @@ voluntary_ctxt_switches:        58
 nonvoluntary_ctxt_switches:     26
 ```
 
-ここまでの説明で、プロセスの監視をするなら`/proc`以下を無限ループで`/proc/[PID]`のディレクトリリストを取得してそれぞれの`/proc/[PID]/cmdline`を読み取ればpspyと同じことができるんじゃないかと思われた方もいるかと思います。
+ここまでの説明で、プロセスの監視をするなら`/proc`以下を無限ループで`/proc/[PID]`のディレクトリリストを取得し、それぞれの`/proc/[PID]/cmdline`を読み取ればpspyと同じことができるんじゃないかと思われた方もいるかと思います。
 
 実際、そのとおりで下記のような簡単なプログラムでpspyと同様の処理が可能です。
 
-ちなみにbashやPythonでも同様の処理を行うプログラムを書いてみましたが、実行速度が遅いせいなのか`/proc/[PID]`を列挙した後、`/proc/[PID]/cmdline`にアクセスしようとする瞬間にはプロセスが終了しており正常にコマンドラインを取得することができませんでした…
+<details>
+  <summary>Pythonコード</summary>
+  
+```python
+import os
+import re
+from concurrent.futures import ThreadPoolExecutor, wait, ALL_COMPLETED
 
-```rust
+plist = dict()
 
+def get_processinfo(p):
+    cmdline = open(f"/proc/{p}/cmdline","r").read()
+    plist[p] = cmdline.replace("\x00"," ").strip()
+
+    status = open(f"/proc/{p}/status","r").read()
+    m = re.search(r"Uid:\t\d+\t\d+\t(?P<uid>\d+)", status)
+    uid = m.group("uid")
+    print(f"PID: {p} | UID: {uid} | {plist[p]}")
+    #print(f"PID: {p} UID: {match.group('uid')}  {plist[p]}")
+
+def main():
+    while True:
+        pids = [f.name for f in os.scandir("/proc") if f.name.isdigit() and f.name not in plist]
+        if len(pids) == 0:
+            continue
+        with ThreadPoolExecutor(max_workers=len(pids)) as executor:
+            tasks = [executor.submit(get_processinfo, p) for p in pids]
+            wait(tasks, return_when=ALL_COMPLETED)
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        os._exit(0)
 ```
+
+</details>
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/bf385ca7-d8f0-486a-ba3b-58be38811c9c)
+
 
 ただし、このプログラムには問題があります。
 
