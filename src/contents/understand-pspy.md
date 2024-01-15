@@ -1,5 +1,5 @@
 ---
-title: "pspyを実装して理解する"
+title: "pspyを理解する"
 id: "pspy"
 description: "pspyがどのようにプロセスを見ているかを解説します。"
 author: "rikoteki"
@@ -398,7 +398,7 @@ fn main() {
 
 https://github.com/r1k0t3k1/thin-pspy
 
-実行後下記のような生存期間の短いプロセスを起動してみても…
+このツールを実行後、下記のような生存期間の短いプロセスを起動してみても…
 
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/a9288c3d-3f83-45b8-970a-9261250f4475)
 
