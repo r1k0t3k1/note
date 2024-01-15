@@ -3,18 +3,9 @@ title: "pspyを実装して理解する"
 id: "pspy"
 description: "pspyがどのようにプロセスを見ているかを解説します。"
 author: "rikoteki"
-createdAt: "2024-01-10"
-isDraft: true
+createdAt: "2024-01-15"
+isDraft: false
 ---
-
-メモ(消す)
-
-pspyの説明
-pspyなしで同様のことをやるには
-↑を行う際の問題点(CPU使用率)
-↑を行う際の問題点(数秒おき実行でプロセスの取りこぼし)
-pspyがこれらをどう解決しているか
-実装してみた
 
 # ToC
 
@@ -28,9 +19,11 @@ https://github.com/DominicBreuker/pspy
 
 例えばカレントユーザー以外の権限で設定されたCronジョブが定期的に実行されている場合、`/var/spool/cron`以下に設定ファイルがあるとroot権限無しではそれぞれの設定を読み取ることができませんが、pspyを対象ホスト上で実行することで定期実行されたプロセスのコマンドラインを確認することができます。
 
+`ps`コマンドなどでもプロセスのコマンドラインは取得できますがpspyを使用すると生存期間がごく短いプロセスも捕捉することができます。
+
 HackTheBoxなどのBoot2RootCTFの簡単な問題では、コマンドライン引数にクレデンシャルを設定しているプロセスがあったり、誰でも読み書きできるシェルスクリプトをroot権限で実行している、など権限昇格の手がかりになることがあります。
 
-pspyは`procfs`を監視することでプロセスの起動をキャッチしています。
+pspyは`procfs`を監視することでプロセスの情報を取得しています。
 
 # procfs
 
@@ -185,7 +178,7 @@ root権限で実行されたプロセスのコマンドラインも取得でき�
 
 この状態だとシステム管理者側に怪しい挙動として検知される可能性があります。(HackTheBoxなどのBoot2Rootではこのスクリプトでも十分かと思いますが。)
 
-また、顧客側の環境に負荷を掛け過ぎて環境を破壊する可能性もあるので安易には使用できません。
+また、ペネトレーションテストで使用する場合、顧客側の環境に負荷を掛け過ぎて環境を破壊する可能性もあるので安易には使用できません。
 
 ### 改善してみる
 
@@ -259,9 +252,13 @@ if __name__ == "__main__":
 
 前の章で挙げた問題点をpspyは`Inotify API`というものを使用して回避しています。
 
+Inotify APIはLinuxのファイルシステムイベントを監視するためのAPIです。
+
+プロセスが起動する際は何かしらのファイルにアクセスするため、そのアクセスイベントをInotify APIを使用してキャッチし、それをトリガーとしてprocfsを列挙する、というのがpspyの基本的な仕組みです。
+
 ## Inotify API
 
-Inotify APIはLinuxのファイルシステムイベントを監視するためのAPIです。
+上述の通りInotify APIはLinuxのファイルシステムイベントを監視するためのAPIです。
 
 以下はman pageからの引用です。
 
@@ -273,7 +270,147 @@ Inotify APIを使用するには以下のシステムコールを使用します
 
 - inotify_init1
 - inotify_add_watch
+- read
 - inotify_rm_watch(任意)
 
+### inotify_init1
+
+Inotify APIを使用するにはまず、`inotify_init1`を使用してInotify用のfdを初期化します。
+
+`inotify_init1`には引数にフラグを指定できますが、今回の用途では`IN_CLOEXEC`を指定します。理由は後述します。
+
+```rust
+extern "C" {
+    pub fn inotify_init1(flags: i32) -> i32;
+}
+
+const IN_CLOEXEC: i32 = 524288;
+//const IN_NONBLOCK: i32 = 2048;
+
+fn main() {
+    let fd = unsafe { inotify_init1(IN_CLOEXEC) };
+}
+
+```
+
+### inotify_add_watch
+
+続いて`inotify_add_watch`を使用して監視対象のファイルシステムを指定します。
+第一引数に`inotify_init1`で取得したfd、第二引数に監視対象のパス、第三引数に監視するイベントマスクを指定します。
+
+```rust
+use std::ffi::CString;
+
+extern "C" {
+    pub fn inotify_init1(flags: i32) -> i32;
+    pub fn inotify_add_watch(fd: i32, pathname: *const i8, mask: u32) -> i32;
+}
+
+const IN_CLOEXEC: i32 = 524288;
+//const IN_NONBLOCK: i32 = 2048;
+const IN_ALL_EVENTS: u32 = 4095;
+
+fn main() {
+    let fd = unsafe { inotify_init1(IN_NONBLOCK) };
+    //let fd = unsafe { inotify_init1(IN_CLOEXEC) };
+    let watch_fd = unsafe {
+        inotify_add_watch(
+            fd,
+            CString::new("/opt/test").unwrap().as_ptr(),
+            IN_ALL_EVENTS,
+        )
+    };
+}
+
+```
+
+監視できるイベントは下記のとおりです。`IN_ALL_EVENTS`は全てのイベントを監視します。
+
+```rust
+IN_ACCESS = 0x1,
+IN_MODIFY = 0x2,
+IN_ATTRIB = 0x4,
+IN_CLOSE_WRITE = 0x8,
+IN_CLOSE_NOWRITE = 0x10,
+IN_CLOSE = 0x8 | 0x10,
+IN_OPEN = 0x20,
+IN_MOVED_FROM = 0x40,
+IN_MOVED_TO = 0x80,
+IN_MOVE = 0x40 | 0x80,
+IN_CREATE = 0x100,
+IN_DELETE = 0x200,
+IN_DELETE_SELF = 0x400,
+IN_MOVE_SELF = 0x800,
+```
+
+### read
+
+監視対象を設定できたら`inotify_init1`で取得したfdに対し、無限ループで`read`を呼び続けます。
+
+このとき、`inotify_init1`で`IN_CLOEXEC`を指定したため、監視対象のイベントが発火するまで`read`がブロックします。
+
+反対に`inotify_init1`で`IN_NONBLOCK`を指定した場合、`read`を呼んだタイミングで監視対象のイベントが発火していなかった場合、ブロックせず即、次の処理に進みます。
+
+CPUの節約という目的の場合、イベント発火までブロックしてほしいので`IN_CLOEXEC`を指定しています。
+
+最終的にInotify APIを使用するプログラム全体は下記のようになります。
+
+このプログラムを実行し、`/opt/test`に文字列を書き込んで見るとイベントの発火を検知して文字列が出力されます。
+
+```rust
+use std::ffi::CString;
+
+extern "C" {
+    pub fn inotify_init1(flags: i32) -> i32;
+    pub fn inotify_add_watch(fd: i32, pathname: *const i8, mask: u32) -> i32;
+    pub fn read(fd: i32, buf: *mut u8, count: usize) -> isize;
+}
+
+const IN_CLOEXEC: i32 = 524288;
+const IN_NONBLOCK: i32 = 2048;
+const IN_ALL_EVENTS: u32 = 4095;
+
+fn main() {
+    let fd = unsafe { inotify_init1(IN_NONBLOCK) };
+    //let fd = unsafe { inotify_init1(IN_CLOEXEC) };
+    let watch_fd = unsafe {
+        inotify_add_watch(
+            fd,
+            CString::new("/opt/test").unwrap().as_ptr(),
+            IN_ALL_EVENTS,
+        )
+    };
+
+    loop {
+        let mut buf = [0_u8;1024];
+        let _ = unsafe { read(fd, buf.as_mut_ptr() as *mut u8, buf.len()) };
+        println!("Event fired!!");
+    }
+}
+
+```
+
+このプログラムは一つのディレクトリ(ファイル)を監視していますが、pspyは`/usr`,`/tmp`,`/etc`,`/home`,`/var`,`/opt`などのフォルダを再帰的に監視することでプロセスの起動をキャッチできる確率を高めています。
 
 # 実装してみたリポジトリの紹介
+
+ここまででpspyの仕組みが理解できているので、自分でpspyの機能を絞ったツールを作成してみました。
+
+https://github.com/r1k0t3k1/thin-pspy
+
+実行後下記のような生存期間の短いプロセスを起動してみても…
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/a9288c3d-3f83-45b8-970a-9261250f4475)
+
+しっかりと補足できていることがわかります。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/5c72e176-5bcc-4f37-a57e-d7935fcf5ffe)
+
+また、CPU使用率を確認してみても、最大で10%、平均して6~7%ほどのCPU使用率に抑えられていることが確認できました。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/e32f2cb1-9f51-48d8-8e4a-9b8a88dfe9ba)
+
+# まとめ
+
+- プロセススパイはBoot2Rootなら簡単なPythonスクリプトでも十分。
+- pspyはInotify APIを使用してプロセスの起動を検知している。
