@@ -277,7 +277,7 @@ Inotify APIを使用するには以下のシステムコールを使用します
 
 Inotify APIを使用するにはまず、`inotify_init1`を使用してInotify用のfdを初期化します。
 
-`inotify_init1`には引数にフラグを指定できますが、今回の用途では`IN_CLOEXEC`を指定します。理由は後述します。
+`inotify_init1`には引数に`IN_CLOEXEC`か`IN_NONBLOCK`フラグを指定できますが、今回の用途では`IN_CLOEXEC`を指定します。理由は後述します。
 
 ```rust
 extern "C" {
