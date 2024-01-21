@@ -1,4 +1,4 @@
----
+![image](https://github.com/r1k0t3k1/note/assets/57973603/e9f8f686-a0a6-4bab-baaa-41cad5aac7ed)---
 title: "Offsec資格のレポート作成を楽にする\nwith Obsidian"
 id: "offsec-report-with-obsidian"
 description: "Obsidianを用いてOffsec系資格のレポートを楽に出力する方法をまとめました。"
@@ -44,7 +44,7 @@ Community Pluginの有効化
 依存パッケージをインストール
 
 ```bash
-sudo apt install texlive-latex-recommended texlive-fonts-extra texlive-latex-extra pandoc p7zip-full
+sudo apt install texlive-latex-recommended texlive-fonts-extra texlive-latex-extra pandoc
 ```
 
 `which pandoc`のファイルパスを`pandoc path`に入力する
@@ -54,7 +54,7 @@ sudo apt install texlive-latex-recommended texlive-fonts-extra texlive-latex-ext
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/5047027e-af4d-4e57-9ac6-01fbf8a73d13)
 
 
-`OSCP-Exam-Report-Template-Markdown`から使用するテンプレートをダウンロードする
+`OSCP-Exam-Report-Template-Markdown`から使用するテンプレートをダウンロードし、ObsidianにドラッグアンドドロップするなどしてVault内にコピーしておく。
 
 https://github.com/noraj/OSCP-Exam-Report-Template-Markdown
 
@@ -80,7 +80,11 @@ ls -1 |  grep -v -E '^eisvogel.latex$' | xargs rm -rf
 
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/144f4839-b245-49fc-a3a1-0b909ce278e8)
 
-ただし、設定によってObisidian上で貼り付けた画像(スクリーンショット等)のパスが認識されずPDF上に画像が出力されない可能性があります。。
+# 注意点
+
+## 画像のパス
+
+設定によってObisidian上で貼り付けた画像(スクリーンショット等)のパスが認識されずPDF上に画像が出力されない可能性がある。
 
 Markdown
 
@@ -102,20 +106,37 @@ PDF
 
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/ad91d3e1-f96a-42c4-bbf4-647e958fe448)
 
-CodeBlock内の文字列が長すぎる場合、紙面からコードがはみ出る場合があります。
+## CodeBlock内の文字列がはみ出す
+
+CodeBlock内の文字列が長すぎる場合、紙面からコードがはみ出る場合がある。
 
 Markdown
 
-![image](https://github.com/r1k0t3k1/note/assets/57973603/a14e2994-4009-47cd-bfc0-464da8668839)
+![image](https://github.com/r1k0t3k1/note/assets/57973603/e2ff7ca6-f84d-4c23-a3fc-5cc7d4872e1e)
 
 PDF
 
-![image](https://github.com/r1k0t3k1/note/assets/57973603/33cc7d3a-cc06-4271-b5a0-f54a346e52de)
+![image](https://github.com/r1k0t3k1/note/assets/57973603/797a0430-3eb7-46c6-8305-4cc9ac8e0bd5)
 
-設定変更
+`Extra Pandoc arguments`に`--listings`を追加する。
 
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/661e14e9-9e3c-4f09-bd4b-1f5e8afc2232)
 
+```diff
+--template eisvogel
+--from markdown+yaml_metadata_block+raw_html
+--table-of-contents
+--toc-depth 4
+--number-sections
+--top-level-division=chapter
+--highlight-style breezedark
+--resource-path=.:src
++ --listings
+```
+
+この設定で再度PDFを出力すると、はみ出た部分が折り返される。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/4c644a31-64b8-494e-8967-d3378ff3c480)
 
 
 # まとめ
