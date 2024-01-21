@@ -1,23 +1,38 @@
-![image](https://github.com/r1k0t3k1/note/assets/57973603/e9f8f686-a0a6-4bab-baaa-41cad5aac7ed)---
-title: "Offsec資格のレポート作成を楽にする\nwith Obsidian"
+---
+title: "Offsec資格のレポート作成を楽にするメモ\nwith Obsidian"
 id: "offsec-report-with-obsidian"
-description: "Obsidianを用いてOffsec系資格のレポートを楽に出力する方法をまとめました。"
+description: "Obsidianを用いてOffsec系資格のレポートを楽に出力する方法のメモ"
 author: "rikoteki"
-createdAt: "2023-11-12"
-isDraft: true
+createdAt: "2024-01-21"
+isDraft: false
 ---
 
 # ToC
 
 # はじめに
 
+Obsidianを使用したOffsec試験のレポート作成方法。
+
+エディタとしてObsidian、Markdown → PDFへの変換ツールとしてpandocを使用する。
+
+細かいところの設定を忘れがちなので備忘として。
+
 # Obsidianのインストール
 
+ここから
 
+https://obsidian.md/download
 
 # obsidian-pandocのインストール
 
+依存パッケージをインストール
+
+```bash
+sudo apt install texlive-latex-recommended texlive-fonts-extra texlive-latex-extra pandoc
+```
+
 Community Pluginの有効化
+
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/bda819fe-3bc3-4d7b-a275-b1d4fa6e904a)
 
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/d400cfb7-170e-4c08-b17a-68b25dc0fa04)
@@ -31,6 +46,7 @@ Community Pluginの有効化
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/c24e483f-7a81-4ea2-9b66-a5d185d96b85)
 
 `Enable`
+
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/a57ee7fc-a0cf-4b09-a07b-dafe07ef0953)
 
 `Options`
@@ -40,12 +56,6 @@ Community Pluginの有効化
 `pandoc path`
 
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/c4c5e1f3-a294-4bb6-ba4f-e0fcab50ce21)
-
-依存パッケージをインストール
-
-```bash
-sudo apt install texlive-latex-recommended texlive-fonts-extra texlive-latex-extra pandoc
-```
 
 `which pandoc`のファイルパスを`pandoc path`に入力する
 
@@ -140,3 +150,5 @@ PDF
 
 
 # まとめ
+
+OSCPで使ったけどめちゃくちゃ楽♥
