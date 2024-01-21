@@ -63,6 +63,22 @@ Community Pluginの有効化
 
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/5047027e-af4d-4e57-9ac6-01fbf8a73d13)
 
+`Extra Pandoc arguments`に``のREADMEに記載のオプションを入力する
+
+https://github.com/noraj/OSCP-Exam-Report-Template-Markdown#manual
+
+```
+\-\-template eisvogel
+\-\-from markdown+yaml_metadata_block+raw_html
+\-\-table-of-contents
+\-\-toc-depth 4
+\-\-number-sections
+\-\-top-level-division=chapter
+\-\-highlight-style breezedark
+\-\-resource-path=.:src
+```
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/9296b38b-80e0-4876-9a31-ba84504758f5)
 
 `OSCP-Exam-Report-Template-Markdown`から使用するテンプレートをダウンロードし、ObsidianにドラッグアンドドロップするなどしてVault内にコピーしておく。
 
@@ -133,14 +149,14 @@ PDF
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/661e14e9-9e3c-4f09-bd4b-1f5e8afc2232)
 
 ```diff
---template eisvogel
---from markdown+yaml_metadata_block+raw_html
---table-of-contents
---toc-depth 4
---number-sections
---top-level-division=chapter
---highlight-style breezedark
---resource-path=.:src
+\-\-template eisvogel
+\-\-from markdown+yaml_metadata_block+raw_html
+\-\-table-of-contents
+\-\-toc-depth 4
+\-\-number-sections
+\-\-top-level-division=chapter
+\-\-highlight-style breezedark
+\-\-resource-path=.:src
 + --listings
 ```
 
