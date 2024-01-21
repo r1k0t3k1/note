@@ -41,12 +41,10 @@ Community Pluginの有効化
 
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/c4c5e1f3-a294-4bb6-ba4f-e0fcab50ce21)
 
-pandocがインストールされていない場合はgithubリポジトリからインストール
-
-https://github.com/jgm/pandoc/
+依存パッケージをインストール
 
 ```bash
-wget https://github.com/jgm/pandoc/releases/download/3.1.11.1/pandoc-3.1.11.1-1-amd64.deb && sudo dpkg -i pandoc-3.1.11.1-1-amd64.deb
+sudo apt install texlive-latex-recommended texlive-fonts-extra texlive-latex-extra pandoc p7zip-full
 ```
 
 `which pandoc`のファイルパスを`pandoc path`に入力する
@@ -54,6 +52,70 @@ wget https://github.com/jgm/pandoc/releases/download/3.1.11.1/pandoc-3.1.11.1-1-
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/c838ebfe-3a5e-449b-95e2-249d1995ccef)
 
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/5047027e-af4d-4e57-9ac6-01fbf8a73d13)
+
+
+`OSCP-Exam-Report-Template-Markdown`から使用するテンプレートをダウンロードする
+
+https://github.com/noraj/OSCP-Exam-Report-Template-Markdown
+
+```
+wget https://github.com/noraj/OSCP-Exam-Report-Template-Markdown/raw/master/src/OSCP-exam-report-template_whoisflynn_v3.2.md -O OSCP-exam-report-template.md
+```
+
+`OSCP-Exam-Report-Template-Markdown`が依存している`eisvogel.latex`を`~/.pandoc/templates/`に配置する
+
+https://github.com/Wandmalfarbe/pandoc-latex-template/releases/download/2.4.2/Eisvogel-2.4.2.zip
+
+```bash
+mkdir -p ~/.pandoc/templates/
+wget https://github.com/Wandmalfarbe/pandoc-latex-template/releases/download/2.4.2/Eisvogel-2.4.2.zip -O ~/.pandoc/templates/eisvogel.latex.zip
+cd ~/.pandoc/templates
+unzip eisvogel.latex.zip
+ls -1 |  grep -v -E '^eisvogel.latex$' | xargs rm -rf
+```
+
+この時点で`Ctrl+p`からコマンドパレットに`pandoc pdf`と入力し、`Pandoc Plugin: Export as PDF (via LaTeX)`を選択するとMarkdownをPDFに変換できる。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/c5670c66-805f-40bf-88db-08a34d62d547)
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/144f4839-b245-49fc-a3a1-0b909ce278e8)
+
+ただし、設定によってObisidian上で貼り付けた画像(スクリーンショット等)のパスが認識されずPDF上に画像が出力されない可能性があります。。
+
+Markdown
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/1c4ea0b6-57e1-4046-ba3e-d21de5c8b5bf)
+
+PDF
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/7a019cc0-51c3-4282-973e-9e1f3b34432c)
+
+この場合、設定の`Use [[wikilinks]]`を有効にすることで画像がPDFに出力されるようになります。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/eb62f3e9-35fb-41b7-b38a-c099e1db0033)
+
+Markdown
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/2a828b75-d2ac-4e35-a147-1948d98d1d57)
+
+PDF
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/ad91d3e1-f96a-42c4-bbf4-647e958fe448)
+
+CodeBlock内の文字列が長すぎる場合、紙面からコードがはみ出る場合があります。
+
+Markdown
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/a14e2994-4009-47cd-bfc0-464da8668839)
+
+PDF
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/33cc7d3a-cc06-4271-b5a0-f54a346e52de)
+
+設定変更
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/661e14e9-9e3c-4f09-bd4b-1f5e8afc2232)
+
 
 
 # まとめ
