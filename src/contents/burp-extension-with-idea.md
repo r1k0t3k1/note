@@ -25,12 +25,6 @@ Community版のダウンロードリンクは下の方にあるので注意
 
 https://www.jetbrains.com/ja-jp/idea/download/
 
-# gradle のインストール
-
-下記公式ページからダウンロード→解凍→パスを通す
-
-https://gradle.org/install/#manually
-
 # プロジェクトの作成
 
 Intellij IDEAで新規プロジェクトを作成する
@@ -60,9 +54,9 @@ Modules -> + -> New module
 
 こんな感じのモジュール構成にしておく
 
-demo-extensionモジュール -> srcフォルダ -> burpモジュール -> javaフォルダ -> demoパッケージ -> DemoExtensionクラス
+モジュール -> srcフォルダ-> mainパッケージ -> javaパッケージ ->-> クラス
 
-![image](https://github.com/r1k0t3k1/note/assets/57973603/cd28fa7b-3033-419e-9316-111c8852fa77)
+![image](https://github.com/r1k0t3k1/note/assets/57973603/00c60a4c-2f5c-419b-b913-7a88bde6c876)
 
 # MontoyaApiインストール
 
