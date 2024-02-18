@@ -66,3 +66,46 @@ frida -U -l hook.js -f com.ad2001.frida0x1
 
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/8f06ce62-dcd7-4fc7-96a9-1fdd5891e057)
 
+# Lab 0x2
+
+特にユーザーがインタラクトできる要素はない。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/a1d825f7-6796-44f4-bccf-0fafa394c15c)
+
+jadx-guiでapkからjavaソースコードを復元する。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/566f9d9f-aed9-4e8c-90f5-58661f7bea89)
+
+MainActivityには以下の関数がある。
+
+- get_flag
+- onCreate
+
+get_flagは引数が`4919`の場合のみ、暗号化されたフラグを復号しTextViewに表示する処理の模様。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/6b36afef-fcc8-4368-ad7b-dbd31468b0d5)
+
+しかし、onCreateからget_flagは呼び出されていない。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/a323a9be-04ff-4061-9608-b51e64a59e6f)
+
+なので、FridaでonCreateをフックし強制的にget_flagを呼び出させる。
+
+```js
+Java.perform(function() {
+  var activity = Java.use("com.ad2001.frida0x2.MainActivity");
+  activity.onCreate.overload("android.os.Bundle").implementation = function(arg_1) {
+    this.onCreate(arg_1);
+    this.get_flag(4919);
+  };
+});
+```
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/11a75821-2b72-408a-9423-845b0eda1a1a)
+
+すると画面に復号されたフラグが表示される。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/6426493e-a872-45c4-a032-0dd25f7f7f04)
+
+
+
