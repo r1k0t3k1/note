@@ -560,7 +560,7 @@ aws cognito-identity get-id \
 
 identityIdを使用したアクセスキーの取得
 
-```
+```bash
 aws cognito-identity get-credentials-for-identity \                                                                  
       --identity-id ap-northeast-1:4f187980-dcb4-c060-4a49-b1d4128a0d3d \
       --logins {ISS}={IDTOKEN}
@@ -588,7 +588,7 @@ S3にアクセス成功
 
 `specialflagbucket`が見える。
 
-```
+```bash
 aws s3 ls
 
 2024-03-24 19:01:16 cdk-hnb659fds-assets-339713032412-ap-northeast-1
