@@ -15,6 +15,10 @@ XSSとS3を題材にしたCTFのようです。
 
 Introduction, Validation Bypass, Logic Bug, Advanced, Specialという難易度(?)設定がありました。
 
+5位でした。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/e89bfebd-32f1-4817-8e37-e49cb258a15a)
+
 # Introduction
 
 ## Welcome Flag
