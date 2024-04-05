@@ -4,7 +4,7 @@ id: "XS3-Writeup"
 description: "XS3 ChallengeのWriteupです。"
 author: "rikoteki"
 createdAt: "2024-04-04"
-isDraft: true
+isDraft: false
 ---
 
 # ToC
