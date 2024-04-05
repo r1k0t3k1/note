@@ -575,7 +575,8 @@ aws cognito-identity get-credentials-for-identity \
 アクセスキーなどを環境変数に設定
 
 ```bash
-export AWS_ACCESS_KEY_ID=REDACTED                                                                       AWS_SECRET_ACCESS_KEY=REDACTED
+export AWS_ACCESS_KEY_ID=REDACTED
+export AWS_SECRET_ACCESS_KEY=REDACTED
 export AWS_SECURITY_TOKEN="REDACTED"
 ```
 
