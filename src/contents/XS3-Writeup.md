@@ -7,8 +7,6 @@ createdAt: "2024-04-04"
 isDraft: false
 ---
 
-# ToC
-
 2024/3/28 17:00 JST ~ 2024/4/4 16:59 JSTで開催されたXS3に参加させていただいたのでWriteupです。
 
 XSSとS3を題材にしたCTFのようです。
@@ -18,6 +16,9 @@ Introduction, Validation Bypass, Logic Bug, Advanced, Specialという難易度(
 5位でした。
 
 ![image](https://github.com/r1k0t3k1/note/assets/57973603/e89bfebd-32f1-4817-8e37-e49cb258a15a)
+
+
+# ToC
 
 # Introduction
 
@@ -273,7 +274,7 @@ Content-Typeの検証は`[\s\;()]`の正規表現にマッチする、または`
 
 カンマで区切って最後に`text/html`をつけてやると後ろのContent-Typeとして参照される模様。
 
-```
+```json
 {
   "extention": "png,text/html"
   "length": 186
@@ -332,7 +333,7 @@ Content-Typeの検証は、以下の条件でチェックしている模様。
 
 かつS3の`PutObjectCommand`には`/`で区切った0番目の値と1番目の値がそれぞれtype/subtypeとして設定されています。
 
-```
+```typescript
   const command = new PutObjectCommand({
     Bucket: process.env.BUCKET_NAME,
     Key: `upload/${filename}`,
