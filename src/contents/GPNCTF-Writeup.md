@@ -11,6 +11,9 @@ Webサイトがプレイリストっぽくてかっこ良い。
 
 Webジャンルの2問だけ説いた。
 
+![image](https://github.com/r1k0t3k1/note/assets/57973603/08778701-fd25-4661-a8db-a0574dbcc0c6)
+
+
 # [Web] Never gonna tell a lie and type you
 
 シンプルな単一PHPファイルのWebアプリ。
@@ -227,7 +230,7 @@ app.get('/script.js', (req, res) => {
 
 また、管理者botにアクセスさせるページには以下のようなCSPが設定される。
 
-```
+```js
 app.post('/chal', (req, res) => {
     const { html } = req.body;
     res.setHeader("Content-Security-Policy", "default-src 'none'; script-src 'self' 'unsafe-inline';");
