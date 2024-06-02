@@ -247,7 +247,7 @@ app.post('/chal', (req, res) => {
 
 具体的には管理者botに閲覧させたHTMLから`/script.js`へのform submitを発生させ、テキストとして描画させる。
 
-CSPに`default-src: none`が付与されているが`form-src`のフォールバックは無いため問題ない。
+CSPに`default-src: none`が付与されているが`form-action`のフォールバックは無いため問題ない。
 
 `/admin`へ送信するHTMLは以下
 
