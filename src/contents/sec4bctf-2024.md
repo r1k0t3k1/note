@@ -7,6 +7,11 @@ createdAt: "2024-06-15"
 isDraft: false
 ---
 
+0nePaddingで参加して16位でした。
+
+![image](https://github.com/r1k0t3k1/note/assets/57973603/e835647f-c5af-49b3-a79f-ab828319b271)
+
+
 # misc
 
 ## getRank
