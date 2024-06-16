@@ -4,7 +4,7 @@ id: "SECCON-Beginners-CTF-2024-Writeup"
 description: "SECCON Beginners CTF 2024のWriteupです。"
 author: "rikoteki"
 createdAt: "2024-06-15"
-isDraft: true
+isDraft: false
 ---
 
 # misc
@@ -442,7 +442,7 @@ http://localhost:3000
     "getFakeFlag,getRealFlag_yUC2BwCtXEkg,Symbol(Symbol.toStringTag)",
     "fake{sorry. this isn't a flag. but, we wrote a flag in this file. try harder!}"
   ]
-]⏎
+]
 ```
 
 あとは判明した関数を実行するだけ
