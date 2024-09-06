@@ -7,8 +7,6 @@ createdAt: "2024-09-06"
 isDraft: false
 ---
 
-# HayabusaとElastic StackでWindowsイベントログ解析環境を構築
-
 ## Hayabusaのインストール
 
 githubのMainリポジトリは安定版ではないらしいので[Release](https://github.com/Yamato-Security/hayabusa/releases)からアーキテクチャに合うバイナリをダウンロードする。
