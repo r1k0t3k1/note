@@ -1,4 +1,13 @@
-![image](https://github.com/user-attachments/assets/ab0216b7-828c-4418-a657-0e2ae7620859)# HayabusaとElastic StackでWindowsイベントログ解析環境を構築
+---
+title: "HayabusaとElastic StackでWindowsイベントログ検証環境構築"
+id: "hayabusa-windows-log-analysis"
+description: "Hardening 2024に向けて"
+author: "rikoteki"
+createdAt: "2024-09-06"
+isDraft: false
+---
+
+# HayabusaとElastic StackでWindowsイベントログ解析環境を構築
 
 ## Hayabusaのインストール
 
