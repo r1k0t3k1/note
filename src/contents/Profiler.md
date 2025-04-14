@@ -1,6 +1,6 @@
 ---
-title: "CLRプロファイラAPIによるセキュリティバイパスの探求 with Rust"
-id: "CLR-Profiler-API"
+title: "CLRプロファイルAPIによるセキュリティバイパスの探求 with Rust"
+id: "CLR-Profile-API"
 description: "Windowsのセキュリティ機構をバイパスするツールを再実装してみた。"
 author: "rikoteki"
 createdAt: "2025-04-14"
@@ -13,7 +13,7 @@ isDraft: true
 
 CRTPというADに対する攻撃に主眼を置いた資格試験のラボをやっていた
 
-この試験では基本的な検知が有効になっておりそれらをバイパスした上で目的を達成する必要がある
+この試験では基本的なWindowsの侵入検知機構が有効になっておりそれらをバイパスした上で目的を達成する必要がある
 
 [Certified Red Team Professional (CRTP)](https://www.alteredsecurity.com/post/certified-red-team-professional-crtp)
 
@@ -21,11 +21,11 @@ CRTPというADに対する攻撃に主眼を置いた資格試験のラボを�
 
 [OmerYa/Invisi-Shell: Hide your Powershell script in plain sight. Bypass all Powershell security features](https://github.com/OmerYa/Invisi-Shell)
 
-(ちなみにAMSI以外の検知処理を無効化する仕組みも入っている)
+(ちなみにこのツールにはAMSI以外の検知処理を無効化する仕組みも入っているが今回はAMSIにフォーカスした)
 
 ### Invisi-Shellの仕組みに対する興味
 
-AMSIバイパスの手法には一番有名なものとして`AmsiScanBuffer`関数先頭アドレスを取得してパッチを当てるというバイパス手法があるが、Invisi-Shellのコードを見た感じ少し異なる手法を取っていたので見てみた
+AMSIバイパスの手法には一番有名なものとして`AmsiScanBuffer`関数の先頭アドレスを取得してパッチを当てるというバイパス手法があるが、Invisi-Shellのコードを見た感じ少し異なる手法を取っていたので見てみた
 
 ## 1. Invisi-Shellとは
 
@@ -58,7 +58,7 @@ REG DELETE "HKCU\Software\Classes\CLSID\{cf0d821e-299b-5307-a3d8-b283c03916db}" 
 
 ### 使用されているセキュリティバイパスの手法
 
-プロファイルAPIは割と古い技術で調べるといろいろな方が実装されていた
+プロファイルAPIは割と古い技術で、調べるといろいろな方が実装されていた
 
 [うらぶろぐ @urasandesu: 10月 2011](https://urasandesu.blogspot.com/2011/10/)
 
@@ -110,13 +110,13 @@ HKCU\Software\Classes\CLSID\{プロファイラのCLSID}\InprocServer32 // プ�
 ```
 
 
-Invisi-Shellの`RunWithRegistryNonAdmin.bat`ではレジストリに`CLSID`や`InProcServer32`への書き込みがあるが、これはプロファイラDLL内にはCOMオブジェクトが定義されていることを示している
+Invisi-Shellの`RunWithRegistryNonAdmin.bat`ではレジストリに`CLSID`や`InProcServer32`への書き込みがあるが、これはプロファイラDLL内にCOMオブジェクトが定義されていることを示している
 
 また、このCOMオブジェクトにはプロファイラとして動作するためのインターフェース`ICorProfilerCallback`が実装されている必要がある
 
 [ICorProfilerCallback Interface - .NET Framework | Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/framework/unmanaged-api/profiling/icorprofilercallback-interface)
 
-このインターフェースを実装していることによりCLRによりプロファイラDLLが読み込まれた後、`ICorProfilerCallback`経由で実行時の情報がやり取りできる
+このインターフェースを実装していることにより、CLRがプロファイラDLLを読み込んだ後、`ICorProfilerCallback`経由で実行時の情報がやり取りできる
 
 ### 実行時ILコード書き換えのメカニズム
 
@@ -173,7 +173,9 @@ LPVOID lpReserved ) // Reserved
 }
 ```
 
-ただ、今回はDLLとしてアタッチ、デタッチされる際の処理は不要なので空実装で問題ない
+ただ、今回はDLLとしてアタッチ、デタッチされる際の処理は不要なので省略しても問題ない
+
+COMオブジェクトとして動作させるために後述する関数をエクスポートする
 
 また、上記の例はC++実装なのでRust実装に変換する必要がある
 
@@ -259,8 +261,16 @@ ULONG Release();
 
 ### プロジェクトの準備
 
+`windows-rs`クレートのドキュメントに沿って実装していく
+
 [Creating your first DLL in Rust - Kenny Kerr](https://kennykerr.ca/rust-getting-started/creating-your-first-dll.html)
 
+重要なの要素は以下
+
+- libクレートとしてプロジェクトを作成する
+- Cargo.tomlのlibセクションに`crate-type = ["cdylib"]`を指定する
+
+cargo generateを使ってDllMainを持つ初期コードを生成しても良い
 
 ```sh
 cargo install cargo-generate
@@ -268,7 +278,24 @@ cargo install cargo-generate
 cargo generate --git https://github.com/r1k0t3k1/rust-windows-template.git
 ```
 
-### DLLの実装
+### DLLとしての実装
+
+以下に則った関数を実装すればOK
+
+- エクスポートする関数に`#[no_mangle]`アトリビュートを設定し、関数名のマングリングを抑制する
+- 関数定義の先頭に`extern "system"`を付与し、呼び出し規約を指定する
+
+関数実装例
+```rust
+#[no_mangle]
+extern "system" fn func() -> i32 {
+    0
+}
+```
+
+ここまででビルドすれば指定した関数がエクスポートされたDLLが生成できる
+
+PE解析ツールのスクショ
 
 ### COMインターフェースの実装
 
