@@ -283,21 +283,59 @@ cargo generate --git https://github.com/r1k0t3k1/rust-windows-template.git
 以下に則った関数を実装すればOK
 
 - エクスポートする関数に`#[no_mangle]`アトリビュートを設定し、関数名のマングリングを抑制する
-- 関数定義の先頭に`extern "system"`を付与し、呼び出し規約を指定する
+- 関数定義の先頭に`extern "system"`を付与し、呼び出し規約を明示
 
 関数実装例
 ```rust
 #[no_mangle]
-extern "system" fn func() -> i32 {
-    0
+extern "system" fn Hello() -> HRESULT {
+	E_NOTIMPL
 }
 ```
 
 ここまででビルドすれば指定した関数がエクスポートされたDLLが生成できる
 
-PE解析ツールのスクショ
+★PE解析ツールのスクショ★
 
-### COMインターフェースの実装
+#### DllGetClassObjectの実装
+
+
+Rustにおける関数シグネチャは以下の通り
+
+```rust
+#[no_mangle]
+extern "system" fn DllGetClassObject(
+    rclsid: *const GUID,
+    riid: *const GUID,
+    ppv: *mut c_void,
+) -> HRESULT
+```
+
+- rclsid -> CLRが読込を要求するプロファイラのCLSID
+- riid   -> `rclsid`のCOMオブジェクトが実装するインターフェースID(試した限りではIUnknownのIIDになる模様)
+- ppv    -> `riid`のインターフェースを指すポインタを返す
+
+現時点では返すCOMオブジェクトが実装できていないので`E_NOTIMPL`を返す
+
+```rust
+#[no_mangle]
+extern "system" fn DllGetClassObject(
+    rclsid: *const GUID,
+    riid: *const GUID,
+    ppv: *mut c_void,
+) -> HRESULT {    
+	E_NOTIMPL
+}
+```
+
+
+### COMの実装
+
+プロファイラ初期化の順で見ると以下の実装が必要
+
+- DllGetClassObject関数(エクスポート関数、説明済み)
+- IClassFactoryインターフェースを実装したファクトリクラス
+- ICorProfilerCallbackインターフェースを実装したクラス
 
 ### ICorProfilerCallbackの実装
 
@@ -326,7 +364,7 @@ PE解析ツールのスクショ
 
 
 
-
+![](attachments/Pasted%20image%2020250421205713.png)
 
 
 # 実装
