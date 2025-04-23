@@ -1,10 +1,10 @@
 ---
-title: "CLRプロファイルAPIによるセキュリティバイパスの探求 with Rust"
+title: "IL Rewriting AMSI bypass with Rust"
 id: "CLR-Profile-API"
 description: "Windowsのセキュリティ機構をバイパスするツールを再実装してみた。"
 author: "rikoteki"
 createdAt: "2025-04-14"
-isDraft: true
+isDraft: false
 ---
 
 ## はじめに
@@ -277,7 +277,14 @@ cargo install cargo-generate
 
 cargo generate --git https://github.com/r1k0t3k1/rust-windows-template.git
 ```
+### 実装詳細
 
+プロファイラ初期化の順で見ると以下の実装が必要
+
+- DLLとしてビルド、DllGetClassObject関数の実装
+- IClassFactoryインターフェースを実装したファクトリクラス
+- ICorProfilerCallbackインターフェースを実装したクラス
+- 
 ### DLLとしての実装
 
 以下に則った関数を実装すればOK
@@ -295,10 +302,11 @@ extern "system" fn Hello() -> HRESULT {
 
 ここまででビルドすれば指定した関数がエクスポートされたDLLが生成できる
 
-★PE解析ツールのスクショ★
+![image](https://github.com/user-attachments/assets/6e2d1d72-ebc2-4b3a-8a5d-8a6908194f6e)
 
 #### DllGetClassObjectの実装
 
+CLRがDLLをロードした際に最初に呼ばれるエクスポート関数
 
 Rustにおける関数シグネチャは以下の通り
 
@@ -315,7 +323,7 @@ extern "system" fn DllGetClassObject(
 - riid   -> `rclsid`のCOMオブジェクトが実装するインターフェースID(試した限りではIUnknownのIIDになる模様)
 - ppv    -> `riid`のインターフェースを指すポインタを返す
 
-現時点では返すCOMオブジェクトが実装できていないので`E_NOTIMPL`を返す
+現時点では返すCOMオブジェクトが実装できていないので`E_NOTIMPL`を返すように実装しておく
 
 ```rust
 #[no_mangle]
@@ -328,52 +336,165 @@ extern "system" fn DllGetClassObject(
 }
 ```
 
+#### IClassFactoryの実装
 
-### COMの実装
+CLRから呼び出された`DllGetClassObject`関数の第一引数`rclsid`はレジストリに登録したプロファイラのCLSIDになる
 
-プロファイラ初期化の順で見ると以下の実装が必要
+そして、`riid`には`ICorProfilerCallback`のIIDではなく、`IClassFactory`のIIDが指定される
 
-- DllGetClassObject関数(エクスポート関数、説明済み)
-- IClassFactoryインターフェースを実装したファクトリクラス
-- ICorProfilerCallbackインターフェースを実装したクラス
+`DllGetClassObject`が呼び出された際の`rclsid`および`riid`
+![image](https://github.com/user-attachments/assets/5442bc25-0d5d-4617-93bd-e8733d9725c8)
 
-### ICorProfilerCallbackの実装
+なぜ直接`ICorPrfilerCallback`のインターフェースが要求されないのかが疑問だがこれがCOMにおけるインスタンス作成のお作法らしい。
 
-- Rustから.NET連携の課題
-- FFIの活用方法
-- COMインターフェイスをRustで扱う
+https://learn.microsoft.com/ja-jp/windows/win32/com/implementing-iclassfactory
 
-## 5. 実装のポイント
+`windows-rs`クレートを使用した実装は以下のようになる
 
-- プロファイラの登録と初期化
-- ILコード書き換えの実装
-- セキュリティ検知回避のテクニック
+Structを定義し、`implement`マクロに実装したいインターフェースを指定し、実装を書くだけだったので楽だった
 
-## 6. 検証と結果
+プロファイラの実装が終わったら、`CreateInstance`関数でプロファイラのインスタンスを返すようにする
 
-- 実装の動作確認
-- オリジナルとの比較
+```rust
+#[implement(IClassFactory)]
+pub struct AchtungBabyClassFactory {}
 
-## 7. セキュリティへの示唆
+impl IClassFactory_Impl for AchtungBabyClassFactory_Impl {
+    fn CreateInstance(
+        &self,
+        punkouter: Ref<'_, IUnknown>,
+        riid: *const GUID,
+        ppvobject: *mut *mut c_void,
+    ) -> windows_core::Result<()> {
+        // [snip]
+    }
 
-- このような技術の両義性
-- 防御側の視点からの考察
+    fn LockServer(&self, _flock: windows_core::BOOL) -> windows_core::Result<()> {
+        Ok(())
+    }
+}
+```
 
-## まとめと今後の展望
+#### ICorProfilerCallbackの実装
 
+`IClassFactory`の実装と同様の方法が使える
 
+`ICorProfilerCallback`の場合は実装しなければいけないインターフェースが少し多くなる
 
+が、大半の関数はIDEの自動実装機能で導出できるし、使わない関数なら中身は空実装(Ok(())を返すだけなど)で良い
+
+```rust
+#[implement(
+    ICorProfilerCallback5,
+    ICorProfilerCallback4,
+    ICorProfilerCallback3,
+    ICorProfilerCallback2,
+    ICorProfilerCallback
+)]
+pub struct AchtungBabyProfiler {
+    profiler_info: OnceLock<ICorProfilerInfo3>,
+}
+
+impl ICorProfilerCallback_Impl for AchtungBabyProfiler_Impl {
+    fn Initialize(
+        &self,
+        picorprofilerinfounk: windows_core::Ref<'_, windows_core::IUnknown>,
+    ) -> windows_core::Result<()> {
+        // [snip]
+    }
+
+// 同様に70メソッド程度を自動実装
+```
+
+中身の実装が必要なメソッドは以下
+
+- ICorProfilerCallback::Initialize
+- ICorProfilerCallback::JITCompilationStarted
+- ICorProfilerCallback::JITCompilationFinished(JITコンパイルされたネイティブコードを確認するため、なくてもいい)
+
+##### Initializeの実装
+
+CLRがプロファイラを初期化する際に呼ばれるメソッド
+
+https://learn.microsoft.com/ja-jp/dotnet/framework/unmanaged-api/profiling/icorprofilercallback-initialize-method
+
+第一引数には`ICorProfilerInfo`インターフェースに変換可能な`IUnknown`インターフェースへのポインタが設定される
+
+`Initialize`メソッド内ではCLRが発生させるプロファイラに関するイベント通知において、どのイベント通知を受け取るかを設定する必要がある
+
+それができるのは`ICorProfilerInfo::SetEventMask`メソッドのみであり、`ICorProfilerInfo`が取得できるタイミングはこの`Initialize`メソッドの呼び出し時のみ
+
+`windows-rs`の`IUnknown`は`cast`メソッドで安全にインターフェースを変換することができる
+
+```rust
+profiler_info.cast::<ICorProfilerInfo3>()?
+```
+
+取得した`ICorProfilerInfo`インタフェースから`SetEventMask`を実行する
+
+引数には購読したい通知をビットマスクで指定する
+
+一番重要なのは`COR_PRF_MONITOR_JIT_COMPILATION`でJITコンパイルの開始通知を受け取ることができる
+
+```rust
+unsafe {
+    self.get_profiler_info().unwrap().SetEventMask(
+        COR_PRF_MONITOR_ASSEMBLY_LOADS.0 as u32 |  // アセンブリの読み込み通知を購読
+        COR_PRF_MONITOR_JIT_COMPILATION.0 as u32 | // JITコンパイルの開始通知を購読
+        COR_PRF_USE_PROFILE_IMAGES.0 as u32,       // NGENにより予めJITコンパイルされたライブラリにおいてもJITコンパイルさせる
+    )?
+};
+```
+
+`COR_PRF_USE_PROFILE_IMAGES`はNGENによりJITコンパイル結果がキャッシュされているイメージにおいてもJITコンパイルさせるようにする
+
+https://learn.microsoft.com/ja-jp/dotnet/framework/tools/ngen-exe-native-image-generator
+
+今回フックしたい`ScanContent`はSMA.dllに定義されているがこれはNGENにより事前コンパイル結果がキャッシュされてしまっているため、このビットマスクを指定しないとJITコンパイルイベント通知が発生しない
+
+![image](https://github.com/user-attachments/assets/c267c488-6b4f-4980-ac94-585f5fcf0f34)
+
+##### JITCompilationStartedの実装
+
+IL書き換え
+
+##### JITCompilationFinishedの実装
+
+この関数ではJITコンパイル結果を確認するだけ
+
+`functionid`でJITコンパイル済みの関数IDが渡ってくる
+
+```rust
+fn JITCompilationFinished(
+    &self,
+    functionid: usize,
+    _hrstatus: windows_core::HRESULT,
+    _fissafetoblock: windows_core::BOOL,
+) -> windows_core::Result<()> {
+    // [snip]
+}
+```
+
+渡ってきた`functionid`を引数として`ICorProfilerInfo::GetCodeInfo2`を呼び出すことでネイティブコードの配置アドレスが取得できる
+
+https://learn.microsoft.com/ja-jp/dotnet/framework/unmanaged-api/profiling/icorprofilerinfo2-getcodeinfo2-method
+
+関数の先頭アドレスから取得したバイナリを適当なディスアセンブラに通すとネイティブコードが再現できる
+
+![image](https://github.com/user-attachments/assets/379914c1-8a98-41ba-bf39-8bcc971864d1)
+
+#### 全体の実装まとめ
+
+1. エクスポート関数`DllGetClassObject`を実装し、`IClassFactory`を返却する
+2. `IClassFactory`を実装し、`CreateInstance`メソッドでプロファイラを返却する
+3. プロファイラに`ICorProfilerCallback`を実装する
+4. プロファイラに`ICorProfilerCallback::Initialize`を実装し、購読したいイベントを設定する
+5. プロファイラに`ICorProfilerCallback::JITCompilationStarted`を実装し、ILを書き換える
+6. プロファイラに`ICorProfilerCallback::JITCompilationFinished`を実装し、書き換えたILを確認する(オプション)
+
+### 検証
 
 ![](attachments/Pasted%20image%2020250421205713.png)
 
-
-# 実装
-
-## DLL部分
-
-## COMオブジェクト部分
-
-### ハマりポイント
-## プロファイラ部分
 
 ![Pasted image 20250410105030](https://github.com/user-attachments/assets/c245669a-971c-4a8b-b80c-007fb90404af)
