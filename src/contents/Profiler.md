@@ -493,8 +493,4 @@ https://learn.microsoft.com/ja-jp/dotnet/framework/unmanaged-api/profiling/icorp
 6. プロファイラに`ICorProfilerCallback::JITCompilationFinished`を実装し、書き換えたILを確認する(オプション)
 
 ### 検証
-
-![](attachments/Pasted%20image%2020250421205713.png)
-
-
 ![Pasted image 20250410105030](https://github.com/user-attachments/assets/c245669a-971c-4a8b-b80c-007fb90404af)
