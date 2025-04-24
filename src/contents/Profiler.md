@@ -458,6 +458,9 @@ https://learn.microsoft.com/ja-jp/dotnet/framework/tools/ngen-exe-native-image-g
 
 IL書き換え
 
+![image](https://github.com/user-attachments/assets/08edcbd7-4372-411b-b156-7142ebe3140e)
+
+
 ##### JITCompilationFinishedの実装
 
 この関数ではJITコンパイル結果を確認するだけ
