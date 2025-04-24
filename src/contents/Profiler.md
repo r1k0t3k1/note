@@ -460,6 +460,7 @@ IL書き換え
 
 ![image](https://github.com/user-attachments/assets/08edcbd7-4372-411b-b156-7142ebe3140e)
 
+![image](https://github.com/user-attachments/assets/50c6c1b3-e41a-4b98-be9b-dc0b0da08bce)
 
 ##### JITCompilationFinishedの実装
 
