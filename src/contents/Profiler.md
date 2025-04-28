@@ -7,6 +7,8 @@ createdAt: "2025-04-28"
 isDraft: false
 ---
 
+# ToC
+
 # はじめに
 
 ## CRTPで説明されたInvisi-Shell
