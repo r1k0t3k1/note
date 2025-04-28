@@ -499,6 +499,10 @@ https://learn.microsoft.com/ja-jp/dotnet/framework/unmanaged-api/profiling/icorp
 ### 検証
 ![Pasted image 20250410105030](https://github.com/user-attachments/assets/c245669a-971c-4a8b-b80c-007fb90404af)
 
+AMSIバイパスができている証跡
+
+![image](https://github.com/user-attachments/assets/719bdf45-e651-47a6-90bb-77af78235c9f)
+
 
 InlineGetAppDomainの定義
 
