@@ -1,5 +1,5 @@
 ---
-title: "Invisi-Shellを理解した"
+title: "Invisi-Shellを理解する"
 id: "CLR-Profile-API"
 description: "Invisi-Shellを再実装してAMSIをバイパスしてみた"
 author: "rikoteki"
@@ -306,6 +306,10 @@ cargo generate --git https://github.com/r1k0t3k1/rust-windows-template.git
 - IClassFactoryインターフェースを実装したファクトリクラス
 - ICorProfilerCallbackインターフェースを実装したクラス
 
+プロファイラとしての処理の流れを図示するとこんな感じ
+
+![image](https://github.com/user-attachments/assets/a618cf63-80fb-4125-a7dd-a700d9acdb2b)
+
 ## DLLとしての実装
 
 以下に則った関数を実装すればOK
@@ -501,7 +505,7 @@ IL書き換えの詳細については後述
 3. 2で得た関数のヘッダ部分をコピーするか、新規に定義してコピー先関数用の関数ヘッダを作成する
 4. 関数ヘッダと自身で定義したIL(関数本体)を連結し、`SetILFunctionBody`関数で`functionId`の関数のポインタを上書きする
 
-#### JITCompilationFinishedの実装
+#### ICorProfilerCallback::JITCompilationFinishedの実装
 
 この関数ではJITコンパイル結果を確認するだけ
 
@@ -542,14 +546,13 @@ https://learn.microsoft.com/ja-jp/dotnet/framework/unmanaged-api/profiling/icorp
 
 `ScanContent`関数のシグネチャは以下の通りで戻り値の`AMSI_RESULT`がAMSIスキャンの結果を表していると思われる
 
-★ScanContentのIL定義スクショ★
+![image](https://github.com/user-attachments/assets/3963e920-63fa-46bd-84e7-78cf46ae32d6)
 
 `AMSI_RESULT`の定義は`System.Management.Automation.AmsiUtils.AmsiNativeMethods`の中にある
 
 これを見るにu32の0が`AMSI_CLEAN`なので`ScanContent`関数が固定で0を返すようにILを書き換えれば良さそうなことがわかった
 
-★AMSI_RESULTの定義スクショ★
-
+![image](https://github.com/user-attachments/assets/fc480011-2a4c-4553-9860-7709e372ec51)
 
 #### IL書き換えの詳細実装
 
@@ -635,21 +638,22 @@ https://ecma-international.org/publications-and-standards/standards/ecma-335/
 
 Tinyフォーマットの場合、ヘッダ全体のサイズは1byteとなり、そのうち先頭2bitでTinyフォーマットを示す`0x02`、後続6bitでメソッドボディのサイズを示す
 
-★仕様書スクショ★
+![image](https://github.com/user-attachments/assets/0a1295bc-db49-4a36-bfdc-c429ab221032)
 
 試しに以下のような関数をビルドしてみた
 
-★CS関数スクショ★
+![image](https://github.com/user-attachments/assets/a4e95ff6-f031-4b5d-a703-23a34538a6b4)
 
-ビルドした結果生成されたILは以下のようになりTinyフォーマット(0x02)でコードサイズが4byteとなった
+ビルドした結果生成されたILは以下のようになりTinyフォーマット(ヘッダが1byteのため)でコードサイズが4byteとなった
 
-★ILスクショ★
+![image](https://github.com/user-attachments/assets/7e2dfa8c-4e80-494c-9ebe-70f5aae7bd42)
 
 その場合Tinyヘッダの値は`0b00010010`=`0x12`となるはず
 
-当該関数の実行ファイルにおけるファイルオフセットは`0x260`となっているのでHEXエディタ等で確認すると計算通り`0x12`となっていた
+当該関数の実行ファイルにおけるファイルオフセットをHEXエディタ等で確認すると計算通り`0x12`となっていた
 
-★HEXエディタスクショ★
+![image](https://github.com/user-attachments/assets/9ff501eb-4337-4675-89f1-ad678eeb8226)
+
 
 そのためRustでは以下のようなu8の数値を定義するだけでOK
 
