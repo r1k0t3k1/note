@@ -433,6 +433,24 @@ impl ICorProfilerCallback_Impl for AchtungBabyProfiler_Impl {
 // 同様に70関数程度を自動実装
 ```
 
+--- 
+
+#### ハマりポイント！
+
+初期化処理やJITコンパイル時のコールバックは`ICorProfilerCallback`に定義されているため、このインターフェースのみを実装したCOMクラスを定義してCLRから読み込ませてみたが、正しく読み込まれないようで初期化処理などが実行されなかった。
+
+Windowsのイベントログを漁ってみると以下のようなメッセージが。
+
+![image](https://github.com/user-attachments/assets/b76d979c-f546-4d30-8b29-6f45583b34bc)
+
+どうやら`ICorProfilerCallback`のみを実装したCOMクラスは.NET Framework4の環境では「古いCLR向けのプロファイラ」として認識されるようで読み込みが中止されている様子
+
+.NET Framework4から使用可能になった`ICorProfilerCallback3`インターフェースも実装するとうまく読み込まれた
+
+https://learn.microsoft.com/ja-jp/dotnet/framework/unmanaged-api/profiling/icorprofilercallback3-interface
+
+---
+
 中身の実装が必要な関数は以下
 
 - ICorProfilerCallback::Initialize
